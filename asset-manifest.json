@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/kfupmmarket/static/css/main.8bb86c11.css",
-    "main.js": "/kfupmmarket/static/js/main.0721fc41.js",
+    "main.js": "/kfupmmarket/static/js/main.a17d1147.js",
     "static/media/bike.jpg": "/kfupmmarket/static/media/bike.2c90119541271ce21522.jpg",
     "static/media/powebankanker.jpg": "/kfupmmarket/static/media/powebankanker.eb7db9ed56ba285adaa5.jpg",
     "static/media/paintingstarrynight.jpg": "/kfupmmarket/static/media/paintingstarrynight.c27136407231020f6480.jpg",
@@ -18,10 +18,10 @@
     "static/media/book.jpeg": "/kfupmmarket/static/media/book.56f00e485fc375ea0559.jpeg",
     "index.html": "/kfupmmarket/index.html",
     "main.8bb86c11.css.map": "/kfupmmarket/static/css/main.8bb86c11.css.map",
-    "main.0721fc41.js.map": "/kfupmmarket/static/js/main.0721fc41.js.map"
+    "main.a17d1147.js.map": "/kfupmmarket/static/js/main.a17d1147.js.map"
   },
   "entrypoints": [
     "static/css/main.8bb86c11.css",
-    "static/js/main.0721fc41.js"
+    "static/js/main.a17d1147.js"
   ]
 }
