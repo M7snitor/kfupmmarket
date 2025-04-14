@@ -11,10 +11,10 @@ import paintingImg from '../assets/items/paintingstarrynight.jpg';
 import powerbankImg from '../assets/items/powebankanker.jpg';
 import bikeImg from '../assets/items/bike.jpg';
 
-function BrowsePage() {
+function BrowsePage({ type }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [filter, setFilter] = useState('New');
+  const [filter, setFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [theme, setTheme] = useState({ green: '#00813e' });
   const stickyRef = useRef();
@@ -33,6 +33,7 @@ function BrowsePage() {
       name: 'iPhone 16',
       price: '3000 SAR',
       categories: ['Electronics'],
+      fromClub: false,
       image: iphoneImg,
     },
     {
@@ -40,6 +41,7 @@ function BrowsePage() {
       name: 'Rich Dad Poor Dad',
       price: '20 SAR',
       categories: ['Books'],
+      fromClub: false,
       image: bookImg,
     },
     {
@@ -49,22 +51,24 @@ function BrowsePage() {
       bid: '100 SAR',
       timeLeft: '2 Days',
       categories: ['Furniture'],
+      fromClub: false,
       image: couchImg,
     },
     {
-      id: 's202100004',
+      id: 's202028860',
       name: 'Gaming Chair',
       bid: '300 SAR',
       timeLeft: '5 Days',
       categories: ['Furniture'],
+      fromClub: false,
       image: chairImg,
     },
     {
-      id: 's202100001',
-      name: 'Starry Night',
-      bid: '1500 SAR',
-      timeLeft: '3 Days',
-      categories: ['Art', 'Furniture'],
+      name: 'Starry Night Poster',
+      price: '45 SAR',
+      quantity: '3 left',
+      categories: ['Media'],
+      fromClub: true,
       image: paintingImg,
     },
     {
@@ -72,6 +76,7 @@ function BrowsePage() {
       name: 'Anker Power Bank',
       price: '150 SAR',
       categories: ['Electronics'],
+      fromClub: false,
       image: powerbankImg,
     },
     {
@@ -80,17 +85,26 @@ function BrowsePage() {
       bid: '900 SAR',
       timeLeft: '5 Days',
       categories: ['Sports'],
+      fromClub: false,
+      image: bikeImg,
+    },
+    {
+      name: 'Sport Bike',
+      price: '1000 SAR',
+      quantity: 'On Request',
+      categories: ['Cyclists'],
+      fromClub: true,
       image: bikeImg,
     },
   ];
 
   const filteredItems = items.filter((item) => {
-    const matchesCategory =
-      filter === 'New' || item.categories.includes(filter);
+    const matchesType = type === 'clubs' ? item.fromClub : !item.fromClub;
+    const matchesCategory = filter === 'All' || item.categories.includes(filter);
     const matchesSearch =
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.id.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+      (item.id && item.id.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesType && matchesCategory && matchesSearch;
   });
 
   useEffect(() => {
@@ -102,13 +116,16 @@ function BrowsePage() {
 
   const handleSearchEnter = (e) => {
     if (e.key === 'Enter') {
-      navigate(`/browse?search=${searchQuery}`);
+      navigate(`/browse/${type}?search=${searchQuery}`);
     }
   };
 
   const handleCategoryClick = (cat) => {
-    navigate(`/browse?category=${cat}`);
+    navigate(`/browse/${type}?category=${cat}`);
   };
+
+  const clubCategories = ['All', 'Media', 'Consulting', 'Cyclists', 'AE', 'IE'];
+  const studentCategories = ['All', 'Electronics', 'Furniture', 'Books', 'Art', 'Sports'];
 
   return (
     <div style={styles.wrapper}>
@@ -128,21 +145,19 @@ function BrowsePage() {
         </div>
 
         <div style={styles.filterRow}>
-          {['New', 'Electronics', 'Furniture', 'Books', 'Art', 'Sports'].map(
-            (cat) => (
-              <button
-                key={cat}
-                onClick={() => handleCategoryClick(cat)}
-                style={{
-                  ...styles.filterBtn,
-                  backgroundColor: filter === cat ? theme.green : '#fff',
-                  color: filter === cat ? '#fff' : '#000',
-                }}
-              >
-                {cat}
-              </button>
-            )
-          )}
+          {(type === 'clubs' ? clubCategories : studentCategories).map((cat) => (
+            <button
+              key={cat}
+              onClick={() => handleCategoryClick(cat)}
+              style={{
+                ...styles.filterBtn,
+                backgroundColor: filter === cat ? theme.green : '#fff',
+                color: filter === cat ? '#fff' : '#000',
+              }}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -154,9 +169,13 @@ function BrowsePage() {
             <div style={styles.itemPrice}>
               {item.price ? `Buy: ${item.price}` : <span style={{ opacity: 0.5 }}>Buy: —</span>}
             </div>
-            <div style={styles.bidInfo}>
-              {item.bid ? `Bid: ${item.bid} | ${item.timeLeft}` : <span style={{ opacity: 0.5 }}>Bid: —</span>}
-            </div>
+            {item.fromClub ? (
+              <div style={styles.quantityInfo}>{item.quantity || 'On Request'}</div>
+            ) : (
+              <div style={styles.bidInfo}>
+                {item.bid ? `Bid: ${item.bid} | ${item.timeLeft}` : <span style={{ opacity: 0.5 }}>Bid: —</span>}
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -231,7 +250,7 @@ const styles = {
     boxShadow: '0 1px 6px rgba(0,0,0,0.1)',
     padding: 10,
     textAlign: 'center',
-    height: 210,
+    height: 190,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -246,19 +265,25 @@ const styles = {
     fontSize: '0.85rem',
     fontWeight: 600,
     marginTop: 3,
-    marginBottom: 2,
+    marginBottom: 0,
   },
   itemPrice: {
     fontSize: '0.75rem',
     fontWeight: 500,
     color: '#00813e',
     fontFamily: 'system-ui, sans-serif',
-    marginBottom: 2,
+    marginBottom: 0,
   },
   bidInfo: {
     fontSize: '0.72rem',
     fontWeight: 500,
-    color: '#c00',
+    color: '#d8c555',
+    fontFamily: 'system-ui, sans-serif',
+  },
+  quantityInfo: {
+    fontSize: '0.72rem',
+    fontWeight: 500,
+    color: '#d8c555',
     fontFamily: 'system-ui, sans-serif',
   },
 };

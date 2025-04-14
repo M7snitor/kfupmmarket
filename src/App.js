@@ -13,7 +13,8 @@ function App() {
       <Route path="/" element={<LoginPage />} />
       <Route element={<Layout />}>
         <Route path="/home" element={<HomePage />} />
-        <Route path="/browse" element={<BrowsePage />} />
+        <Route path="/browse/resell" element={<BrowsePage type="resell" />} />
+        <Route path="/browse/clubs" element={<BrowsePage type="clubs" />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/listing" element={<ListingFormPage />} />
         <Route path="/item/:id" element={<ItemDetailPage />} />

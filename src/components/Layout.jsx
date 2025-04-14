@@ -1,6 +1,7 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import homeIcon from '../assets/icons/home.png';
+import shopIcon from '../assets/icons/shop.png';
 import browseIcon from '../assets/icons/cart.png';
 import accountIcon from '../assets/icons/person.png';
 
@@ -9,7 +10,7 @@ function Layout() {
   const navigate = useNavigate();
   const isLogin = location.pathname === '/';
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => location.pathname.startsWith(path);
 
   return (
     <>
@@ -31,16 +32,33 @@ function Layout() {
               alt="Home"
               style={{
                 ...styles.icon,
-                filter: isActive('/home') ? 'brightness(0) saturate(100%) sepia(100%) hue-rotate(90deg) brightness(90%) contrast(85%)' : 'none',
+                filter: isActive('/home') ? activeFilter : 'none',
               }}
             />
           </button>
 
           <button
-            onClick={() => navigate('/browse')}
+            onClick={() => navigate('/browse/clubs?category=All')}
             style={{
               ...styles.navBtn,
-              ...(isActive('/browse') && styles.activeBtn),
+              ...(isActive('/browse/clubs') && styles.activeBtn),
+            }}
+          >
+            <img
+              src={shopIcon}
+              alt="Clubs"
+              style={{
+                ...styles.icon,
+                filter: isActive('/browse/clubs') ? activeFilter : 'none',
+              }}
+            />
+          </button>
+
+          <button
+            onClick={() => navigate('/browse/resell?category=All')}
+            style={{
+              ...styles.navBtn,
+              ...(isActive('/browse/resell') && styles.activeBtn),
             }}
           >
             <img
@@ -48,7 +66,7 @@ function Layout() {
               alt="Browse"
               style={{
                 ...styles.icon,
-                filter: isActive('/browse') ? 'brightness(0) saturate(100%) sepia(100%) hue-rotate(90deg) brightness(90%) contrast(85%)' : 'none',
+                filter: isActive('/browse/resell') ? activeFilter : 'none',
               }}
             />
           </button>
@@ -65,7 +83,7 @@ function Layout() {
               alt="Account"
               style={{
                 ...styles.icon,
-                filter: isActive('/account') ? 'brightness(0) saturate(100%) sepia(100%) hue-rotate(90deg) brightness(90%) contrast(85%)' : 'none',
+                filter: isActive('/account') ? activeFilter : 'none',
               }}
             />
           </button>
@@ -74,6 +92,9 @@ function Layout() {
     </>
   );
 }
+
+const activeFilter =
+  'brightness(0) saturate(100%) sepia(100%) hue-rotate(90deg) brightness(90%) contrast(85%)';
 
 const styles = {
   navbar: {

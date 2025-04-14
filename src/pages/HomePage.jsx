@@ -11,7 +11,8 @@ import furnitureIcon from '../assets/icons/chair.png';
 import electronicsIcon from '../assets/icons/electronics.png';
 import booksIcon from '../assets/icons/book.png';
 import toolsIcon from '../assets/icons/tools.png';
-import newIcon from '../assets/icons/new.png';
+import allIcon from '../assets/icons/new.png';
+import searchIcon from '../assets/icons/search.png';
 
 import logo from '../assets/LogoNameAlpha.png';
 
@@ -27,13 +28,17 @@ function HomePage() {
     });
   }, []);
 
-  const handleCategoryClick = (category) => {
-    navigate(`/browse?category=${encodeURIComponent(category)}`);
+  const handleClubClick = (category) => {
+    navigate(`/browse/clubs?category=${encodeURIComponent(category)}`);
+  };
+
+  const handleResellClick = (category) => {
+    navigate(`/browse/resell?category=${encodeURIComponent(category)}`);
   };
 
   const handleSearchEnter = (e) => {
     if (e.key === 'Enter' && searchInput.trim()) {
-      navigate(`/browse?search=${encodeURIComponent(searchInput.trim())}`);
+      navigate(`/browse/resell?search=${encodeURIComponent(searchInput.trim())}`);
     }
   };
 
@@ -46,9 +51,20 @@ function HomePage() {
           <div style={styles.sectionHeader}>KFUPM Club services</div>
           <p style={styles.sectionSub}>Support your favorite clubs</p>
           <div style={styles.grid}>
-            {[ae, consulting, cyclists, ie, media].map((img, i) => (
-              <div key={i} style={styles.clubCard}>
-                <img src={img} alt={`club-${i}`} style={styles.clubImage} />
+            {[{ img: allIcon, label: 'All' },
+              { img: media, label: 'Media' },
+              { img: consulting, label: 'Consulting' },
+              { img: cyclists, label: 'Cyclists' },
+              { img: ae, label: 'AE' },
+              { img: ie, label: 'IE' }
+            ].map((club, i) => (
+              <div
+                key={i}
+                style={{ ...styles.resellCard, cursor: 'pointer' }}
+                onClick={() => handleClubClick(club.label)}
+              >
+                <img src={club.img} alt={club.label} style={styles.icon} />
+                <span>{club.label}</span>
               </div>
             ))}
           </div>
@@ -58,17 +74,15 @@ function HomePage() {
           <div style={styles.sectionHeader}>KFUPM Student resell</div>
           <p style={styles.sectionSub}>Help students while saving money</p>
           <div style={styles.grid}>
-            {[
+            {[{ img: allIcon, label: 'All' },
               { img: furnitureIcon, label: 'Furniture' },
               { img: electronicsIcon, label: 'Electronics' },
               { img: booksIcon, label: 'Books' },
-              { img: toolsIcon, label: 'Tools' },
-              { img: newIcon, label: 'New' },
-            ].map((item, i) => (
+              { img: toolsIcon, label: 'Tools' }].map((item, i) => (
               <div
                 key={i}
                 style={{ ...styles.resellCard, cursor: 'pointer' }}
-                onClick={() => handleCategoryClick(item.label)}
+                onClick={() => handleResellClick(item.label)}
               >
                 <img src={item.img} alt={item.label} style={styles.icon} />
                 <span>{item.label}</span>
@@ -77,14 +91,17 @@ function HomePage() {
           </div>
         </div>
 
-        <input
-          type="text"
-          placeholder="Search for specific items with name/ID"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          onKeyDown={handleSearchEnter}
-          style={styles.search}
-        />
+        <div style={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="Search for specific items with name/ID"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={handleSearchEnter}
+            style={styles.search}
+          />
+          <img src={searchIcon} alt="Search" style={styles.searchIcon} />
+        </div>
       </div>
     </div>
   );
@@ -163,13 +180,26 @@ const styles = {
     objectFit: 'contain',
     marginBottom: 5,
   },
+  searchContainer: {
+    position: 'relative',
+    marginTop: 15,
+  },
   search: {
     width: '100%',
     padding: '0.75rem 1rem',
     borderRadius: 30,
     border: '1px solid #ccc',
     fontSize: '0.9rem',
-    marginTop: 15,
+  },
+  searchIcon: {
+    position: 'absolute',
+    right: 15,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    width: 20,
+    height: 20,
+    objectFit: 'contain',
+    opacity: 0.6,
   },
 };
 
