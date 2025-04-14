@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/kfupmmarket/static/css/main.8bb86c11.css",
+    "main.js": "/kfupmmarket/static/js/main.0721fc41.js",
+    "static/media/bike.jpg": "/kfupmmarket/static/media/bike.2c90119541271ce21522.jpg",
+    "static/media/powebankanker.jpg": "/kfupmmarket/static/media/powebankanker.eb7db9ed56ba285adaa5.jpg",
+    "static/media/paintingstarrynight.jpg": "/kfupmmarket/static/media/paintingstarrynight.c27136407231020f6480.jpg",
+    "static/media/media.jpeg": "/kfupmmarket/static/media/media.87e600c403f85bfc7f29.jpeg",
+    "static/media/gamingchair.jpg": "/kfupmmarket/static/media/gamingchair.bd327246fdd765cbf538.jpg",
+    "static/media/LogoNameAlpha.png": "/kfupmmarket/static/media/LogoNameAlpha.5da2b8b1b7e47aec9646.png",
+    "static/media/cyclists.jpeg": "/kfupmmarket/static/media/cyclists.565eeea2e9a4474531ce.jpeg",
+    "static/media/ie.jpeg": "/kfupmmarket/static/media/ie.a526905f662a8cc63144.jpeg",
+    "static/media/ae.jpeg": "/kfupmmarket/static/media/ae.37e8789cc62581f38ec1.jpeg",
+    "static/media/LogoNameAlphaWhite.png": "/kfupmmarket/static/media/LogoNameAlphaWhite.02ffeab2b28f5a12aeb2.png",
+    "static/media/consulting.jpeg": "/kfupmmarket/static/media/consulting.1c4d8fbf7809b74de397.jpeg",
+    "static/media/iphone16.jpg": "/kfupmmarket/static/media/iphone16.164c6a79d078f5f1248c.jpg",
+    "static/media/couch.jpg": "/kfupmmarket/static/media/couch.d850f04823a64c5c1244.jpg",
+    "static/media/book.jpeg": "/kfupmmarket/static/media/book.56f00e485fc375ea0559.jpeg",
+    "index.html": "/kfupmmarket/index.html",
+    "main.8bb86c11.css.map": "/kfupmmarket/static/css/main.8bb86c11.css.map",
+    "main.0721fc41.js.map": "/kfupmmarket/static/js/main.0721fc41.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8bb86c11.css",
+    "static/js/main.0721fc41.js"
+  ]
+}
