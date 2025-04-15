@@ -1,130 +1,293 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 
-import homeIcon from '../assets/icons/home.png';
-import shopIcon from '../assets/icons/shop.png';
-import browseIcon from '../assets/icons/cart.png';
-import accountIcon from '../assets/icons/person.png';
+import { ReactComponent as HomeIcon } from '../assets/icons/home.svg';
+import { ReactComponent as HomeIconActive } from '../assets/icons/homef.svg';
+import { ReactComponent as ShopIcon } from '../assets/icons/shopbag.svg';
+import { ReactComponent as ShopIconActive } from '../assets/icons/shopbagf.svg';
+import { ReactComponent as BrowseIcon } from '../assets/icons/cart.svg';
+import { ReactComponent as BrowseIconActive } from '../assets/icons/cartf.svg';
+import { ReactComponent as AccountIcon } from '../assets/icons/person.svg';
+import { ReactComponent as AccountIconActive } from '../assets/icons/personf.svg';
+import { ReactComponent as MenuIcon } from '../assets/icons/menu.svg';
+import searchIcon from '../assets/icons/search.png';
+import closeIcon from '../assets/icons/close.svg';
+import arrowBackIcon from '../assets/icons/arrow back.png';
+import scrollUpIcon from '../assets/icons/scrollup.svg';
 
 function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const isLogin = location.pathname === '/';
+  const [search, setSearch] = useState('');
+  const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0 });
+  const [showBackArrow, setShowBackArrow] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const navRefs = useRef([]);
+
+  const tabs = [
+    { path: '/home', label: 'Home', icon: HomeIcon, active: HomeIconActive },
+    { path: '/browse', label: 'Market', icon: ShopIcon, active: ShopIconActive },
+    { path: '/cart', label: 'Cart', icon: BrowseIcon, active: BrowseIconActive },
+    { path: '/account', label: 'You', icon: AccountIcon, active: AccountIconActive },
+    { path: '/more', label: 'More', icon: MenuIcon, active: MenuIcon },
+  ];
 
   const isActive = (path) => location.pathname.startsWith(path);
 
+  useEffect(() => {
+    const activeIndex = tabs.findIndex((tab) => isActive(tab.path));
+    const ref = navRefs.current[activeIndex];
+    if (ref) {
+      const left = ref.offsetLeft + ref.offsetWidth / 4;
+      const width = ref.offsetWidth / 2;
+      setUnderlineStyle({ left, width });
+    }
+  }, [location.pathname]);
+
+  const handleSearchEnter = (e) => {
+    if (e.key === 'Enter' && search.trim()) {
+      navigate(`/browse?search=${encodeURIComponent(search.trim())}`);
+      setSearch('');
+      setShowBackArrow(false);
+    }
+  };
+
+  const handleSearchClear = () => {
+    setSearch('');
+    setShowBackArrow(false);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <>
-      <div style={{ paddingBottom: isLogin ? 0 : '4rem' }}>
+      {!isLogin && (
+        <div style={styles.searchContainer}>
+          <div style={styles.searchBarWrapper}>
+            <div
+              style={{
+                ...styles.arrowWrapper,
+                transform: showBackArrow ? 'translateX(0)' : 'translateX(-150%)',
+                opacity: showBackArrow ? 1 : 0,
+              }}
+            >
+              <img
+                src={arrowBackIcon}
+                alt="back"
+                onClick={handleSearchClear}
+                style={styles.backIcon}
+              />
+            </div>
+            <div
+              style={{
+                ...styles.inputWrapper,
+                marginLeft: showBackArrow ? '0' : '-2rem',
+                flexGrow: 1,
+                transition: 'all 0.3s ease',
+              }}
+            >
+              <img src={searchIcon} alt="search" style={styles.inputLeftIcon} />
+              <input
+                type="text"
+                value={search}
+                placeholder="Search KFUPM Market"
+                onFocus={() => setShowBackArrow(true)}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={handleSearchEnter}
+                style={styles.searchInput}
+              />
+              {search && (
+                <img
+                  src={closeIcon}
+                  alt="clear"
+                  onClick={() => setSearch('')}
+                  style={styles.inputRightIcon}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={{ paddingBottom: isLogin ? 0 : '6rem' }}>
         <Outlet />
       </div>
 
+      {showScrollTop && (
+        <button style={styles.scrollTopBtn} onClick={scrollToTop}>
+          <img
+            src={scrollUpIcon}
+            alt="Scroll to top"
+            style={{ width: 46, height: 46, filter: 'invert(28%) sepia(91%) saturate(1422%) hue-rotate(88deg) brightness(92%) contrast(93%)' }}
+          />
+        </button>
+      )}
+
       {!isLogin && (
         <div style={styles.navbar}>
-          <button
-            onClick={() => navigate('/home')}
-            style={{
-              ...styles.navBtn,
-              ...(isActive('/home') && styles.activeBtn),
-            }}
-          >
-            <img
-              src={homeIcon}
-              alt="Home"
-              style={{
-                ...styles.icon,
-                filter: isActive('/home') ? activeFilter : 'none',
-              }}
-            />
-          </button>
-
-          <button
-            onClick={() => navigate('/browse/clubs?category=All')}
-            style={{
-              ...styles.navBtn,
-              ...(isActive('/browse/clubs') && styles.activeBtn),
-            }}
-          >
-            <img
-              src={shopIcon}
-              alt="Clubs"
-              style={{
-                ...styles.icon,
-                filter: isActive('/browse/clubs') ? activeFilter : 'none',
-              }}
-            />
-          </button>
-
-          <button
-            onClick={() => navigate('/browse/resell?category=All')}
-            style={{
-              ...styles.navBtn,
-              ...(isActive('/browse/resell') && styles.activeBtn),
-            }}
-          >
-            <img
-              src={browseIcon}
-              alt="Browse"
-              style={{
-                ...styles.icon,
-                filter: isActive('/browse/resell') ? activeFilter : 'none',
-              }}
-            />
-          </button>
-
-          <button
-            onClick={() => navigate('/account')}
-            style={{
-              ...styles.navBtn,
-              ...(isActive('/account') && styles.activeBtn),
-            }}
-          >
-            <img
-              src={accountIcon}
-              alt="Account"
-              style={{
-                ...styles.icon,
-                filter: isActive('/account') ? activeFilter : 'none',
-              }}
-            />
-          </button>
+          {tabs.map((tab, index) => {
+            const IconComponent = isActive(tab.path) ? tab.active : tab.icon;
+            return (
+              <button
+                key={tab.path}
+                ref={(el) => (navRefs.current[index] = el)}
+                onClick={() => navigate(tab.path)}
+                style={styles.navBtn}
+              >
+                <div style={styles.navContent}>
+                  <IconComponent
+                    style={{
+                      ...styles.icon,
+                      fill: isActive(tab.path) ? 'var(--primary-green)' : 'var(--text-light)',
+                    }}
+                  />
+                  <div
+                    style={{
+                      ...styles.label,
+                      color: isActive(tab.path) ? 'var(--primary-green)' : 'var(--text-light)',
+                      fontWeight: isActive(tab.path) ? '600' : '400',
+                    }}
+                  >
+                    {tab.label}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+          <div style={{ ...styles.underline, ...underlineStyle }} />
         </div>
       )}
     </>
   );
 }
 
-const activeFilter =
-  'brightness(0) saturate(100%) sepia(100%) hue-rotate(90deg) brightness(90%) contrast(85%)';
-
 const styles = {
+  searchContainer: {
+    position: 'sticky',
+    top: 0,
+    backgroundColor: 'var(--white)',
+    zIndex: 101,
+    padding: '1rem 1rem 0.5rem',
+    borderBottom: '1px solid var(--gray-border)',
+  },
+  searchBarWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: '100%',
+    transition: 'all 0.3s ease',
+  },
+  arrowWrapper: {
+    width: 24,
+    height: 24,
+    marginRight: 8,
+    transition: 'all 0.3s ease',
+  },
+  backIcon: {
+    width: 20,
+    height: 20,
+    cursor: 'pointer',
+  },
+  inputWrapper: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  inputLeftIcon: {
+    position: 'absolute',
+    left: 10,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    width: 16,
+    height: 16,
+    opacity: 0.6,
+  },
+  inputRightIcon: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    width: 16,
+    height: 16,
+    cursor: 'pointer',
+    opacity: 0.6,
+  },
+  searchInput: {
+    width: '100%',
+    padding: '0.6rem 2rem',
+    paddingLeft: '2rem',
+    borderRadius: 25,
+    border: '1px solid var(--gray-border)',
+    fontSize: '16px',
+  },
   navbar: {
     position: 'fixed',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
-    borderTop: '1px solid #ddd',
+    backgroundColor: 'var(--white)',
+    borderTop: '1px solid var(--gray-border)',
     display: 'flex',
     justifyContent: 'space-around',
-    padding: '0.6rem 0',
+    padding: '0.3rem 0.25rem 0.2rem',
     zIndex: 100,
   },
   navBtn: {
     background: 'none',
     border: 'none',
     cursor: 'pointer',
-    borderTop: '3px solid transparent',
-    paddingTop: '6px',
-    paddingBottom: '0',
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
   },
-  activeBtn: {
-    borderTop: '3px solid #00813e',
+  navContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 2,
   },
   icon: {
-    width: 24,
-    height: 24,
-    objectFit: 'contain',
-    transition: 'filter 0.3s ease',
+    width: 22,
+    height: 22,
+    transition: 'all 0.3s ease',
+  },
+  label: {
+    fontSize: '0.7rem',
+    transition: 'all 0.3s ease',
+  },
+  underline: {
+    position: 'absolute',
+    top: 0,
+    height: '2px',
+    width: '50%',
+    backgroundColor: 'var(--primary-green)',
+    transition: 'all 0.3s ease',
+    borderRadius: 2,
+  },
+  scrollTopBtn: {
+    position: 'fixed',
+    top: '4.5rem',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    zIndex: 102,
   },
 };
 
