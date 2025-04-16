@@ -10,7 +10,25 @@
     --text-light: #666;
     --gray-border: #ccc;
     --danger-red: #d60000;
+    --card-shadow: rgba(0, 0, 0, 0.1);
   }
+  /* Dark Mode Variables */
+:root[data-theme='dark'] {
+  --primary-green: #00813e;
+  --light-green: #a8d9c1;
+  --dark-green: #003f20;
+  --white: #1e1e1e;
+  --text-dark: #eee;
+  --text-light: #aaa;
+  --gray-border: #444;
+  --danger-red: #ff4f4f;
+  --card-shadow: rgba(255, 255, 255, 0.08);
+}
+
+body, html {
+  background-color: var(--white);
+  color: var(--text-dark);
+}
   
   * {
     margin: 0;

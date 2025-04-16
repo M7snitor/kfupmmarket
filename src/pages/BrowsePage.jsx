@@ -17,6 +17,7 @@ function BrowsePage() {
   const [filter, setFilter] = useState('All');
   const [club, setClub] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('new');
   const [theme, setTheme] = useState({ green: '#00813e' });
   const stickyRef = useRef();
 
@@ -26,7 +27,6 @@ function BrowsePage() {
     const sellerParam = params.get('seller');
     const clubParam = params.get('club');
     const search = params.get('search');
-
     if (cat) setFilter(cat); else setFilter('All');
     if (sellerParam) setSeller(sellerParam); else setSeller('All');
     if (clubParam) setClub(clubParam); else setClub('All');
@@ -34,99 +34,38 @@ function BrowsePage() {
   }, [location.search]);
 
   const items = [
-    {
-      id: 'itm000001',
-      name: 'iPhone 16',
-      price: '3000 SAR',
-      categories: ['Electronics'],
-      fromClub: false,
-      image: iphoneImg,
-    },
-    {
-      id: 'itm000002',
-      name: 'Rich Dad Poor Dad',
-      price: '20 SAR',
-      categories: ['Books'],
-      fromClub: false,
-      image: bookImg,
-    },
-    {
-      id: 'itm000003',
-      name: 'Modern Sofa',
-      price: '500 SAR',
-      bid: '100 SAR',
-      timeLeft: '2 Days',
-      categories: ['Furniture'],
-      fromClub: false,
-      image: couchImg,
-    },
-    {
-      id: 'itm000004',
-      name: 'Gaming Chair',
-      bid: '300 SAR',
-      timeLeft: '5 Days',
-      categories: ['Furniture'],
-      fromClub: false,
-      image: chairImg,
-    },
-    {
-      id: 'club001',
-      name: 'Starry Night Poster',
-      price: '45 SAR',
-      quantity: '3 left',
-      categories: ['Art'],
-      fromClub: true,
-      club: 'Media',
-      image: paintingImg,
-    },
-    {
-      id: 'itm000005',
-      name: 'Anker Power Bank',
-      price: '150 SAR',
-      categories: ['Electronics'],
-      fromClub: false,
-      image: powerbankImg,
-    },
-    {
-      id: 'itm000006',
-      name: 'Sport Bike Auction',
-      bid: '900 SAR',
-      timeLeft: '5 Days',
-      categories: ['Sports'],
-      fromClub: false,
-      image: bikeImg,
-    },
-    {
-      id: 'club002',
-      name: 'Sport Bike',
-      price: '1000 SAR',
-      quantity: 'On Request',
-      categories: ['Cyclists', 'Sports'],
-      fromClub: true,
-      club: 'Cyclists',
-      image: bikeImg,
-    },
+    { id: 'itm000001', name: 'iPhone 16', price: '3000 SAR', categories: ['Electronics'], fromClub: false, date: '2024-04-01', image: iphoneImg },
+    { id: 'itm000002', name: 'Rich Dad Poor Dad', price: '20 SAR', categories: ['Books'], fromClub: false, date: '2024-03-28', image: bookImg },
+    { id: 'itm000003', name: 'Modern Sofa', price: '500 SAR', bid: '100 SAR', timeLeft: '2 Days', categories: ['Furniture'], fromClub: false, date: '2024-03-25', image: couchImg },
+    { id: 'itm000004', name: 'Gaming Chair', bid: '300 SAR', timeLeft: '5 Days', categories: ['Furniture'], fromClub: false, date: '2024-03-30', image: chairImg },
+    { id: 'club001', name: 'Starry Night Poster', price: '45 SAR', quantity: '3 left', categories: ['Art'], fromClub: true, club: 'Media', date: '2024-04-03', image: paintingImg },
+    { id: 'itm000005', name: 'Anker Power Bank', price: '150 SAR', categories: ['Electronics'], fromClub: false, date: '2024-03-29', image: powerbankImg },
+    { id: 'itm000006', name: 'Sport Bike Auction', bid: '900 SAR', timeLeft: '5 Days', categories: ['Sports'], fromClub: false, date: '2024-03-27', image: bikeImg },
+    { id: 'club002', name: 'Sport Bike', price: '1000 SAR', quantity: 'On Request', categories: ['Cyclists', 'Sports'], fromClub: true, club: 'Cyclists', date: '2024-03-26', image: bikeImg },
   ];
 
   const filteredItems = items.filter((item) => {
-    const matchesSeller =
-      seller === 'All' ||
-      (seller === 'Clubs' && item.fromClub) ||
-      (seller === 'Resell' && !item.fromClub);
+    const matchesSeller = seller === 'All' || (seller === 'Clubs' && item.fromClub) || (seller === 'Resell' && !item.fromClub);
     const matchesCategory = filter === 'All' || item.categories.includes(filter);
     const matchesClub = !item.fromClub || seller !== 'Clubs' || club === 'All' || item.club === club;
-    const matchesSearch =
-      searchQuery === '' ||
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (item.id && item.id.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesSearch = searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase()) || (item.id && item.id.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesSeller && matchesCategory && matchesClub && matchesSearch;
+  }).sort((a, b) => {
+    if (sortBy === 'price') {
+      const priceA = parseFloat((a.price || '').replace(/[^\d.]/g, '')) || Infinity;
+      const priceB = parseFloat((b.price || '').replace(/[^\d.]/g, '')) || Infinity;
+      return priceA - priceB;
+    } else if (sortBy === 'priceHigh') {
+      const priceA = parseFloat((a.price || '').replace(/[^\d.]/g, '')) || 0;
+      const priceB = parseFloat((b.price || '').replace(/[^\d.]/g, '')) || 0;
+      return priceB - priceA;
+    }
+    return new Date(b.date) - new Date(a.date); // default: new
   });
 
   useEffect(() => {
     const root = getComputedStyle(document.documentElement);
-    setTheme({
-      green: root.getPropertyValue('--primary-green') || '#00813e',
-    });
+    setTheme({ green: root.getPropertyValue('--primary-green') || '#00813e' });
   }, []);
 
   const updateQuery = (nextSeller = seller, nextFilter = filter, nextClub = club) => {
@@ -154,6 +93,10 @@ function BrowsePage() {
     navigate(`/browse?${updateQuery(seller, filter, clubName)}`);
   };
 
+  const handleSortChange = (val) => {
+    setSortBy(val);
+  };
+
   const clubList = ['All', 'Media', 'Consulting', 'Cyclists', 'AE', 'IE'];
   const categories = ['All', 'Electronics', 'Furniture', 'Books', 'Art', 'Sports'];
   const sellers = ['All', 'Clubs', 'Resell'];
@@ -162,60 +105,81 @@ function BrowsePage() {
     <div style={styles.wrapper}>
       <img src={logo} alt="KFUPM Market" style={styles.logo} />
 
-      
-
-
-
       <div style={styles.headerContent}>
-        <div style={styles.filterRow}>
-          {sellers.map((val) => (
-            <button
-              key={val}
-              onClick={() => handleSellerClick(val)}
-              style={{
-                ...styles.filterBtn,
-                backgroundColor: seller === val ? theme.green : '#fff',
-                color: seller === val ? '#fff' : '#000',
-              }}
-            >
-              {val === 'Resell' ? 'Student Resell' : val}
-            </button>
-          ))}
-        </div>
-
-        <div style={styles.filterRow}>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => handleCategoryClick(cat)}
-              style={{
-                ...styles.filterBtn,
-                backgroundColor: filter === cat ? theme.green : '#fff',
-                color: filter === cat ? '#fff' : '#000',
-              }}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {seller === 'Clubs' && (
-          <div style={styles.filterRow}>
-            {clubList.map((clubName) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={styles.filterLabel}>Seller:</span>
+          <div style={{ ...styles.filterRow, overflowX: 'auto' }}>
+            {sellers.map((val) => (
               <button
-                key={clubName}
-                onClick={() => handleClubChange(clubName)}
+                key={val}
+                onClick={() => handleSellerClick(val)}
                 style={{
                   ...styles.filterBtn,
-                  backgroundColor: club === clubName ? theme.green : '#fff',
-                  color: club === clubName ? '#fff' : '#000',
+                  backgroundColor: seller === val ? theme.green : '#fff',
+                  color: seller === val ? '#fff' : '#000',
                 }}
               >
-                {clubName}
+                {val === 'Resell' ? 'Student Resell' : val}
               </button>
             ))}
           </div>
+        </div>
+
+        <hr style={{ margin: '6px 0' }} />
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={styles.filterLabel}>Type:</span>
+          <div style={{ ...styles.filterRow, overflowX: 'auto' }}>
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => handleCategoryClick(cat)}
+                style={{
+                  ...styles.filterBtn,
+                  backgroundColor: filter === cat ? theme.green : '#fff',
+                  color: filter === cat ? '#fff' : '#000',
+                }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {seller === 'Clubs' && (
+          <>
+            <hr style={{ margin: '6px 0' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={styles.filterLabel}>Club:</span>
+              <div style={{ ...styles.filterRow, overflowX: 'auto' }}>
+                {clubList.map((clubName) => (
+                  <button
+                    key={clubName}
+                    onClick={() => handleClubChange(clubName)}
+                    style={{
+                      ...styles.filterBtn,
+                      backgroundColor: club === clubName ? theme.green : '#fff',
+                      color: club === clubName ? '#fff' : '#000',
+                    }}
+                  >
+                    {clubName}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
         )}
+
+        <hr style={{ margin: '6px 0' }} />
+
+        <div style={{ ...styles.filterRow, justifyContent: 'flex-end', marginTop: 6 }}>
+          <span style={{ marginRight: 10, fontSize: '0.85rem' }}>Sort by:</span>
+          <select value={sortBy} onChange={(e) => handleSortChange(e.target.value)} style={{ padding: '0.25rem 0.5rem', borderRadius: 6 }}>
+            <option value="new">New</option>
+            <option value="price">Price: Low to High</option>
+            <option value="priceHigh">Price: High to Low</option>
+          </select>
+        </div>
       </div>
 
       <div style={styles.itemGrid}>
@@ -247,7 +211,7 @@ function BrowsePage() {
 
 const styles = {
   wrapper: {
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--white)',
     minHeight: '100vh',
     paddingBottom: '5rem',
   },
@@ -269,7 +233,7 @@ const styles = {
     flexShrink: 0,
     padding: '0.5rem 1rem',
     borderRadius: 20,
-    border: '1px solid #ccc',
+    border: '1px solid var(--gray-border)',
     fontSize: '0.8rem',
     cursor: 'pointer',
     fontWeight: 'bold',
@@ -281,9 +245,9 @@ const styles = {
     padding: '1rem',
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--white)',
     borderRadius: 10,
-    boxShadow: '0 1px 6px rgba(0,0,0,0.1)',
+    boxShadow: '0 1px 6px var(--card-shadow)',
     padding: 10,
     textAlign: 'center',
     height: 190,

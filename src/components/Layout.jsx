@@ -23,6 +23,7 @@ function Layout() {
   const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0 });
   const [showBackArrow, setShowBackArrow] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const searchInputRef = useRef(null);
   const navRefs = useRef([]);
 
   const tabs = [
@@ -61,10 +62,16 @@ function Layout() {
   const handleSearchEnter = (e) => {
     if (e.key === 'Enter' && search.trim()) {
       navigate(`/browse?search=${encodeURIComponent(search.trim())}`);
+      searchInputRef.current?.blur();
     }
   };
 
   const handleSearchClear = () => {
+    setSearch('');
+    searchInputRef.current?.focus();
+  };
+
+  const handleSearchBack = () => {
     const params = new URLSearchParams(location.search);
     params.delete('search');
     navigate(`${location.pathname}?${params.toString()}`);
@@ -99,7 +106,7 @@ function Layout() {
               <img
                 src={arrowBackIcon}
                 alt="back"
-                onClick={handleSearchClear}
+                onClick={handleSearchBack}
                 style={styles.backIcon}
               />
             </div>
@@ -113,6 +120,7 @@ function Layout() {
             >
               <img src={searchIcon} alt="search" style={styles.inputLeftIcon} />
               <input
+                ref={searchInputRef}
                 type="text"
                 value={search}
                 placeholder="Search KFUPM Market"
@@ -125,7 +133,7 @@ function Layout() {
                 <img
                   src={closeIcon}
                   alt="clear"
-                  onClick={() => setSearch('')}
+                  onClick={handleSearchClear}
                   style={styles.inputRightIcon}
                 />
               )}
@@ -140,11 +148,13 @@ function Layout() {
 
       {showScrollTop && (
         <button style={styles.scrollTopBtn} onClick={scrollToTop}>
-          <img
-            src={scrollUpIcon}
-            alt="Scroll to top"
-            style={{ width: 46, height: 46, filter: 'invert(28%) sepia(91%) saturate(1422%) hue-rotate(88deg) brightness(92%) contrast(93%)' }}
-          />
+          <div style={styles.scrollTopCircle}>
+            <img
+              src={scrollUpIcon}
+              alt="Scroll to top"
+              style={{ width: 28, height: 28, filter: 'invert(28%) sepia(91%) saturate(1422%) hue-rotate(88deg) brightness(92%) contrast(93%)' }}
+            />
+          </div>
         </button>
       )}
 
@@ -185,7 +195,6 @@ function Layout() {
     </>
   );
 }
-
 
 const styles = {
   searchContainer: {
@@ -299,6 +308,16 @@ const styles = {
     border: 'none',
     cursor: 'pointer',
     zIndex: 102,
+  },
+  scrollTopCircle: {
+    backgroundColor: '#fff',
+    borderRadius: '50%',
+    width: 50,
+    height: 50,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
   },
 };
 
