@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/kfupmmarket/static/css/main.8bb86c11.css",
-    "main.js": "/kfupmmarket/static/js/main.a9f3b3e1.js",
+    "main.js": "/kfupmmarket/static/js/main.5cfa8f96.js",
     "static/media/bike.jpg": "/kfupmmarket/static/media/bike.2c90119541271ce21522.jpg",
     "static/media/powebankanker.jpg": "/kfupmmarket/static/media/powebankanker.eb7db9ed56ba285adaa5.jpg",
     "static/media/paintingstarrynight.jpg": "/kfupmmarket/static/media/paintingstarrynight.c27136407231020f6480.jpg",
@@ -28,11 +28,12 @@
     "static/media/close.svg": "/kfupmmarket/static/media/close.0669dc9c8d7db985495074d006dece99.svg",
     "static/media/menu.svg": "/kfupmmarket/static/media/menu.6f906a17c68dbcb9cbeaa825603a6c54.svg",
     "static/media/homef.svg": "/kfupmmarket/static/media/homef.9f99520362622d5d0db4fe6a662f4e12.svg",
+    "static/media/dropdown.svg": "/kfupmmarket/static/media/dropdown.48d52214b49d9d044399d580453ecad1.svg",
     "main.8bb86c11.css.map": "/kfupmmarket/static/css/main.8bb86c11.css.map",
-    "main.a9f3b3e1.js.map": "/kfupmmarket/static/js/main.a9f3b3e1.js.map"
+    "main.5cfa8f96.js.map": "/kfupmmarket/static/js/main.5cfa8f96.js.map"
   },
   "entrypoints": [
     "static/css/main.8bb86c11.css",
-    "static/js/main.a9f3b3e1.js"
+    "static/js/main.5cfa8f96.js"
   ]
 }
