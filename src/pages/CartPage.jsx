@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import couchImg from '../assets/items/couch.jpg';
 import powerbankImg from '../assets/items/powebankanker.jpg';
 import bookImg from '../assets/items/book.jpeg';
-import bidIcon from '../assets/icons/bid.svg';
-import checkIcon from '../assets/icons/check.svg';
-import deleteIcon from '../assets/icons/deletef.svg';
-import eyeIcon from '../assets/icons/eyef.svg';
-import cartIcon from '../assets/icons/cartf.svg';
-import dropdownIcon from '../assets/icons/dropdown.svg';
+import { ReactComponent as BidIcon } from '../assets/icons/bid.svg';
+import { ReactComponent as CheckIcon } from '../assets/icons/check.svg';
+import { ReactComponent as DeleteIcon } from '../assets/icons/deletef.svg';
+import { ReactComponent as EyeIcon } from '../assets/icons/eyef.svg';
+import { ReactComponent as CartIcon } from '../assets/icons/cartf.svg';
+import { ReactComponent as DropdownIcon } from '../assets/icons/dropdown.svg';
 
 function CartPage() {
   const [cartOpen, setCartOpen] = useState(true);
@@ -18,35 +18,31 @@ function CartPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  const HeaderCapsule = ({ title, desc, open, setOpen, icon }) => (
+  const HeaderCapsule = ({ title, desc, open, setOpen, icon: Icon }) => (
     <div
       style={{ ...styles.headerCapsule, backgroundColor: 'var(--primary-green)' }}
       onClick={() => setOpen(!open)}
     >
-      <img
-        src={dropdownIcon}
-        alt="toggle"
-        style={{
-          ...styles.dropdownIcon,
-          transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-        }}
-      />
-      <div style={{ flexGrow: 1 }}>
-        <div style={styles.headerText}>{title}</div>
-        <div style={styles.subText}>{desc}</div>
+      <div style={styles.leftSection}>
+        <DropdownIcon
+          style={{
+            ...styles.dropdownIcon,
+            transform: open ? 'rotate(0deg)' : 'rotate(180deg)',
+          }}
+        />
+        <div>
+          <div style={styles.headerText}>{title}</div>
+          <div style={styles.subText}>{desc}</div>
+        </div>
       </div>
-      <img
-        src={icon}
-        alt="section"
-        style={styles.sectionIcon}
-      />
+      <Icon style={styles.sectionIcon} />
     </div>
   );
 
   return (
     <div style={{ padding: '1rem' }}>
       <div style={styles.section}>
-        <HeaderCapsule title="Cart" desc="Items you are ready to buy" open={cartOpen} setOpen={setCartOpen} icon={cartIcon} />
+        <HeaderCapsule title="Cart" desc="Items you are ready to buy" open={cartOpen} setOpen={setCartOpen} icon={CartIcon} />
         <div style={{
           ...styles.animatedGrid,
           maxHeight: cartOpen ? '500px' : '0',
@@ -60,8 +56,8 @@ function CartPage() {
               <div style={styles.buy}>Buy: 500 SAR</div>
             </div>
             <div style={styles.buttonBox}>
-              <button style={styles.btn}><img src={eyeIcon} alt="Watch" style={styles.icon} /> Watch</button>
-              <button style={styles.btn}><img src={deleteIcon} alt="Remove" style={styles.icon} /> Remove</button>
+              <button style={styles.btn}><EyeIcon style={styles.icon} /> Watch</button>
+              <button style={styles.btn}><DeleteIcon style={styles.icon} /> Remove</button>
             </div>
           </div>
           <div style={styles.card}>
@@ -71,8 +67,8 @@ function CartPage() {
               <div style={styles.buy}>Buy: 150 SAR</div>
             </div>
             <div style={styles.buttonBox}>
-              <button style={styles.btn}><img src={eyeIcon} alt="Watch" style={styles.icon} /> Watch</button>
-              <button style={styles.btn}><img src={deleteIcon} alt="Remove" style={styles.icon} /> Remove</button>
+              <button style={styles.btn}><EyeIcon style={styles.icon} /> Watch</button>
+              <button style={styles.btn}><DeleteIcon style={styles.icon} /> Remove</button>
             </div>
           </div>
           <div style={{ textAlign: 'right', marginTop: 10 }}>
@@ -83,7 +79,7 @@ function CartPage() {
       </div>
 
       <div style={styles.section}>
-        <HeaderCapsule title="Watchlist" desc="Saved items for later" open={watchOpen} setOpen={setWatchOpen} icon={eyeIcon} />
+        <HeaderCapsule title="Watchlist" desc="Saved items for later" open={watchOpen} setOpen={setWatchOpen} icon={EyeIcon} />
         <div style={{
           ...styles.animatedGrid,
           maxHeight: watchOpen ? '500px' : '0',
@@ -97,15 +93,15 @@ function CartPage() {
               <div style={styles.buy}>Buy: 20 SAR</div>
             </div>
             <div style={styles.buttonBox}>
-              <button style={styles.btn}><img src={cartIcon} alt="Cart" style={styles.icon} /> Add</button>
-              <button style={styles.btn}><img src={deleteIcon} alt="Remove" style={styles.icon} /> Remove</button>
+              <button style={styles.btn}><CartIcon style={styles.icon} /> Add</button>
+              <button style={styles.btn}><DeleteIcon style={styles.icon} /> Remove</button>
             </div>
           </div>
         </div>
       </div>
 
       <div style={styles.section}>
-        <HeaderCapsule title="Bid List" desc="Items you're bidding on" open={bidOpen} setOpen={setBidOpen} icon={bidIcon} />
+        <HeaderCapsule title="Bid List" desc="Items you're bidding on" open={bidOpen} setOpen={setBidOpen} icon={BidIcon} />
         <div style={{
           ...styles.animatedGrid,
           maxHeight: bidOpen ? '500px' : '0',
@@ -120,8 +116,8 @@ function CartPage() {
               <div style={styles.bid}>Bid: 100 SAR | 2 Days</div>
             </div>
             <div style={styles.buttonBox}>
-              <button style={styles.btn}><img src={bidIcon} alt="Bid" style={styles.icon} /> Rebid</button>
-              <button style={styles.btn}><img src={deleteIcon} alt="Remove" style={styles.icon} /> Remove</button>
+              <button style={styles.btn}><BidIcon style={styles.icon} /> Rebid</button>
+              <button style={styles.btn}><DeleteIcon style={styles.icon} /> Remove</button>
             </div>
           </div>
           <div style={styles.card}>
@@ -132,8 +128,8 @@ function CartPage() {
               <div style={styles.bid}>Bid: 130 SAR | 3 Days</div>
             </div>
             <div style={styles.buttonBox}>
-              <button style={styles.btn}><img src={bidIcon} alt="Bid" style={styles.icon} /> Rebid</button>
-              <button style={styles.btn}><img src={checkIcon} alt="Top" style={styles.icon} /> Top Bid</button>
+              <button style={styles.btn}><BidIcon style={styles.icon} /> Rebid</button>
+              <button style={styles.btn}><CheckIcon style={styles.icon} /> Top Bid</button>
             </div>
           </div>
         </div>
@@ -146,14 +142,19 @@ const styles = {
   section: {
     marginBottom: '2rem',
   },
+  leftSection: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+  },
   headerCapsule: {
     display: 'flex',
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 30,
     padding: '0.75rem 1rem',
     color: 'white',
     cursor: 'pointer',
-    gap: 10,
     transition: 'all 0.3s ease',
   },
   headerText: {
@@ -171,10 +172,9 @@ const styles = {
     transition: 'transform 0.4s ease',
   },
   sectionIcon: {
-    width: 24,
-    height: 24,
-    marginLeft: 8,
-    filter: 'invert(1)',
+    width: 28,
+    height: 28,
+    fill: 'white',
   },
   animatedGrid: {
     overflow: 'hidden',
@@ -233,7 +233,7 @@ const styles = {
   icon: {
     width: 16,
     height: 16,
-    filter: 'brightness(0) invert(1)',
+    fill: 'var(--black)',
   },
   total: {
     fontWeight: 'bold',

@@ -6,11 +6,13 @@
     --light-green: #b6e5ce;
     --dark-green: #006232;
     --white: #ffffff;
+    --black: #1e1e1e; 
     --text-dark: #222;
     --text-light: #666;
     --gray-border: #ccc;
     --danger-red: #d60000;
     --card-shadow: rgba(0, 0, 0, 0.1);
+    
   }
   /* Dark Mode Variables */
 :root[data-theme='dark'] {
@@ -18,6 +20,7 @@
   --light-green: #a8d9c1;
   --dark-green: #003f20;
   --white: #1e1e1e;
+  --black: #ffffff; 
   --text-dark: #eee;
   --text-light: #aaa;
   --gray-border: #444;
