@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/kfupmmarket/static/css/main.8bb86c11.css",
-    "main.js": "/kfupmmarket/static/js/main.5cfa8f96.js",
+    "main.css": "/kfupmmarket/static/css/main.80c18dad.css",
+    "main.js": "/kfupmmarket/static/js/main.9e3fa4ba.js",
     "static/media/bike.jpg": "/kfupmmarket/static/media/bike.2c90119541271ce21522.jpg",
     "static/media/powebankanker.jpg": "/kfupmmarket/static/media/powebankanker.eb7db9ed56ba285adaa5.jpg",
     "static/media/paintingstarrynight.jpg": "/kfupmmarket/static/media/paintingstarrynight.c27136407231020f6480.jpg",
@@ -16,24 +16,29 @@
     "static/media/iphone16.jpg": "/kfupmmarket/static/media/iphone16.164c6a79d078f5f1248c.jpg",
     "static/media/couch.jpg": "/kfupmmarket/static/media/couch.d850f04823a64c5c1244.jpg",
     "static/media/book.jpeg": "/kfupmmarket/static/media/book.56f00e485fc375ea0559.jpeg",
+    "static/media/moonsun.svg": "/kfupmmarket/static/media/moonsun.bed82da86ece23661ec2bfffc8ce7aa2.svg",
     "index.html": "/kfupmmarket/index.html",
     "static/media/person.svg": "/kfupmmarket/static/media/person.7950bda7a184359e4b3a4ef5bbaa5c26.svg",
     "static/media/shopbag.svg": "/kfupmmarket/static/media/shopbag.d6e0def6815d5e28c7d00077cf0a8dca.svg",
     "static/media/cart.svg": "/kfupmmarket/static/media/cart.ab358598d8998070d3048b2654acc0f8.svg",
+    "static/media/eyef.svg": "/kfupmmarket/static/media/eyef.eb35feb6509b53f72d10c5d86b33b2ac.svg",
     "static/media/cartf.svg": "/kfupmmarket/static/media/cartf.8a41408a5ce6794f52508fb56b90ba64.svg",
     "static/media/shopbagf.svg": "/kfupmmarket/static/media/shopbagf.7e5fa25b2fb37ba81f2e8565ee237637.svg",
     "static/media/scrollup.svg": "/kfupmmarket/static/media/scrollup.bf53db54ab634a12437fb402acb81830.svg",
+    "static/media/check.svg": "/kfupmmarket/static/media/check.2375dd59c79be0910bf711dc76a2b365.svg",
     "static/media/personf.svg": "/kfupmmarket/static/media/personf.d9ee7287916a585c0231294fb680492a.svg",
+    "static/media/deletef.svg": "/kfupmmarket/static/media/deletef.f2eb05374cc1bbdf574d842a72367f4e.svg",
+    "static/media/bid.svg": "/kfupmmarket/static/media/bid.ec72ff27586f6b72506b87b5bcdc4dae.svg",
     "static/media/home.svg": "/kfupmmarket/static/media/home.e2a434f09640463abf86a71b580a47f2.svg",
     "static/media/close.svg": "/kfupmmarket/static/media/close.0669dc9c8d7db985495074d006dece99.svg",
     "static/media/menu.svg": "/kfupmmarket/static/media/menu.6f906a17c68dbcb9cbeaa825603a6c54.svg",
     "static/media/homef.svg": "/kfupmmarket/static/media/homef.9f99520362622d5d0db4fe6a662f4e12.svg",
     "static/media/dropdown.svg": "/kfupmmarket/static/media/dropdown.48d52214b49d9d044399d580453ecad1.svg",
-    "main.8bb86c11.css.map": "/kfupmmarket/static/css/main.8bb86c11.css.map",
-    "main.5cfa8f96.js.map": "/kfupmmarket/static/js/main.5cfa8f96.js.map"
+    "main.80c18dad.css.map": "/kfupmmarket/static/css/main.80c18dad.css.map",
+    "main.9e3fa4ba.js.map": "/kfupmmarket/static/js/main.9e3fa4ba.js.map"
   },
   "entrypoints": [
-    "static/css/main.8bb86c11.css",
-    "static/js/main.5cfa8f96.js"
+    "static/css/main.80c18dad.css",
+    "static/js/main.9e3fa4ba.js"
   ]
 }
