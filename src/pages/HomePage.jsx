@@ -12,14 +12,15 @@ import electronicsIcon from '../assets/icons/electronics.png';
 import booksIcon from '../assets/icons/book.png';
 import toolsIcon from '../assets/icons/tools.png';
 import allIcon from '../assets/icons/new.png';
-import searchIcon from '../assets/icons/search.png';
+import dropdownIcon from '../assets/icons/dropdown.svg';
 
 import logo from '../assets/LogoNameAlpha.png';
 
 function HomePage() {
   const navigate = useNavigate();
   const [theme, setTheme] = useState({ green: '#00813e' });
-  const [searchInput, setSearchInput] = useState('');
+  const [clubOpen, setClubOpen] = useState(true);
+  const [resellOpen, setResellOpen] = useState(true);
 
   useEffect(() => {
     const root = getComputedStyle(document.documentElement);
@@ -28,18 +29,12 @@ function HomePage() {
     });
   }, []);
 
-  const handleClubClick = (category) => {
-    navigate(`/browse/clubs?category=${encodeURIComponent(category)}`);
-  };
-
-  const handleResellClick = (category) => {
-    navigate(`/browse/resell?category=${encodeURIComponent(category)}`);
-  };
-
-  const handleSearchEnter = (e) => {
-    if (e.key === 'Enter' && searchInput.trim()) {
-      navigate(`/browse/resell?search=${encodeURIComponent(searchInput.trim())}`);
-    }
+  const handleClick = (seller, category, club = null) => {
+    const query = new URLSearchParams();
+    query.set('seller', seller);
+    if (category !== 'All') query.set('category', category);
+    if (seller === 'Clubs' && club && club !== 'All') query.set('club', club);
+    navigate(`/browse?${query.toString()}`);
   };
 
   return (
@@ -47,21 +42,28 @@ function HomePage() {
       <div style={styles.pageContent}>
         <img src={logo} alt="KFUPM Market Logo" style={styles.logo} />
 
+        {/* Club Section */}
         <div style={styles.section}>
-          <div style={styles.sectionHeader}>KFUPM Club services</div>
-          <p style={styles.sectionSub}>Support your favorite clubs</p>
-          <div style={styles.grid}>
-            {[{ img: allIcon, label: 'All' },
-              { img: media, label: 'Media' },
-              { img: consulting, label: 'Consulting' },
-              { img: cyclists, label: 'Cyclists' },
-              { img: ae, label: 'AE' },
-              { img: ie, label: 'IE' }
-            ].map((club, i) => (
+          <div style={{ ...styles.headerCapsule, backgroundColor: theme.green }} onClick={() => setClubOpen(!clubOpen)}>
+            <img src={dropdownIcon} alt="toggle" style={{ ...styles.dropdownIcon, transform: clubOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+            <div>
+              <div style={styles.headerText}>KFUPM Club services</div>
+              <div style={styles.subText}>Support your favorite clubs</div>
+            </div>
+          </div>
+          <div
+            style={{
+              ...styles.animatedGrid,
+              maxHeight: clubOpen ? '500px' : '0',
+              opacity: clubOpen ? 1 : 0,
+              marginTop: clubOpen ? 10 : 0,
+            }}
+          >
+            {[{ img: allIcon, label: 'All' }, { img: media, label: 'Media' }, { img: consulting, label: 'Consulting' }, { img: cyclists, label: 'Cyclists' }, { img: ae, label: 'AE' }, { img: ie, label: 'IE' }].map((club, i) => (
               <div
                 key={i}
                 style={{ ...styles.resellCard, cursor: 'pointer' }}
-                onClick={() => handleClubClick(club.label)}
+                onClick={() => handleClick('Clubs', 'All', club.label)}
               >
                 <img src={club.img} alt={club.label} style={styles.icon} />
                 <span>{club.label}</span>
@@ -70,37 +72,34 @@ function HomePage() {
           </div>
         </div>
 
+        {/* Resell Section */}
         <div style={styles.section}>
-          <div style={styles.sectionHeader}>KFUPM Student resell</div>
-          <p style={styles.sectionSub}>Help students while saving money</p>
-          <div style={styles.grid}>
-            {[{ img: allIcon, label: 'All' },
-              { img: furnitureIcon, label: 'Furniture' },
-              { img: electronicsIcon, label: 'Electronics' },
-              { img: booksIcon, label: 'Books' },
-              { img: toolsIcon, label: 'Tools' }].map((item, i) => (
+          <div style={{ ...styles.headerCapsule, backgroundColor: theme.green }} onClick={() => setResellOpen(!resellOpen)}>
+            <img src={dropdownIcon} alt="toggle" style={{ ...styles.dropdownIcon, transform: resellOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+            <div>
+              <div style={styles.headerText}>KFUPM Student resell</div>
+              <div style={styles.subText}>Help students while saving money</div>
+            </div>
+          </div>
+          <div
+            style={{
+              ...styles.animatedGrid,
+              maxHeight: resellOpen ? '500px' : '0',
+              opacity: resellOpen ? 1 : 0,
+              marginTop: resellOpen ? 10 : 0,
+            }}
+          >
+            {[{ img: allIcon, label: 'All' }, { img: furnitureIcon, label: 'Furniture' }, { img: electronicsIcon, label: 'Electronics' }, { img: booksIcon, label: 'Books' }, { img: toolsIcon, label: 'Tools' }].map((item, i) => (
               <div
                 key={i}
                 style={{ ...styles.resellCard, cursor: 'pointer' }}
-                onClick={() => handleResellClick(item.label)}
+                onClick={() => handleClick('Resell', item.label)}
               >
                 <img src={item.img} alt={item.label} style={styles.icon} />
                 <span>{item.label}</span>
               </div>
             ))}
           </div>
-        </div>
-
-        <div style={styles.searchContainer}>
-          <input
-            type="text"
-            placeholder="Search for specific items with name/ID"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={handleSearchEnter}
-            style={styles.search}
-          />
-          <img src={searchIcon} alt="Search" style={styles.searchIcon} />
         </div>
       </div>
     </div>
@@ -124,50 +123,45 @@ const styles = {
   section: {
     marginBottom: 30,
   },
-  sectionHeader: {
+  headerCapsule: {
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: 30,
+    padding: '0.75rem 1rem',
+    color: 'white',
+    cursor: 'pointer',
+    gap: 10,
+  },
+  headerText: {
     fontSize: '1rem',
     fontWeight: 'bold',
-    border: '1px solid #ccc',
-    padding: '0.5rem',
-    borderRadius: 30,
-    textAlign: 'center',
   },
-  sectionSub: {
-    fontSize: '0.9rem',
-    color: '#666',
-    textAlign: 'center',
-    margin: '0.5rem 0 1rem 0',
+  subText: {
+    fontSize: '0.75rem',
+    opacity: 0.9,
   },
-  grid: {
+  dropdownIcon: {
+    width: 24,
+    height: 24,
+    filter: 'brightness(0) invert(1)',
+    transition: 'transform 0.3s ease',
+  },
+  animatedGrid: {
+    overflow: 'hidden',
+    transition: 'max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease',
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: 10,
+    gap: 12,
     justifyItems: 'center',
-  },
-  clubCard: {
-    width: 80,
-    height: 80,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    overflow: 'hidden',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  clubImage: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'contain',
   },
   resellCard: {
     border: '1px solid #ccc',
-    borderRadius: 10,
-    width: 80,
-    height: 80,
+    borderRadius: 12,
+    width: 100,
+    height: 100,
     textAlign: 'center',
-    fontSize: '0.8rem',
-    padding: 5,
+    fontSize: '0.85rem',
+    padding: 8,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -175,31 +169,10 @@ const styles = {
     boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
   },
   icon: {
-    width: 30,
-    height: 30,
+    width: 34,
+    height: 34,
     objectFit: 'contain',
-    marginBottom: 5,
-  },
-  searchContainer: {
-    position: 'relative',
-    marginTop: 15,
-  },
-  search: {
-    width: '100%',
-    padding: '0.75rem 1rem',
-    borderRadius: 30,
-    border: '1px solid #ccc',
-    fontSize: '0.9rem',
-  },
-  searchIcon: {
-    position: 'absolute',
-    right: 15,
-    top: '50%',
-    transform: 'translateY(-50%)',
-    width: 20,
-    height: 20,
-    objectFit: 'contain',
-    opacity: 0.6,
+    marginBottom: 6,
   },
 };
 

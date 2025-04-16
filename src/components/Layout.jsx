@@ -45,26 +45,36 @@ function Layout() {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const q = params.get('search');
+    if (q) {
+      setSearch(q);
+      setShowBackArrow(true);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
+
   const handleSearchEnter = (e) => {
     if (e.key === 'Enter' && search.trim()) {
       navigate(`/browse?search=${encodeURIComponent(search.trim())}`);
-      setSearch('');
-      setShowBackArrow(false);
     }
   };
 
   const handleSearchClear = () => {
+    const params = new URLSearchParams(location.search);
+    params.delete('search');
+    navigate(`${location.pathname}?${params.toString()}`);
     setSearch('');
     setShowBackArrow(false);
   };
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 200) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
+      setShowScrollTop(window.scrollY > 200);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -176,6 +186,7 @@ function Layout() {
   );
 }
 
+
 const styles = {
   searchContainer: {
     position: 'sticky',
@@ -268,7 +279,7 @@ const styles = {
   },
   label: {
     fontSize: '0.7rem',
-    transition: 'all 0.3s ease',
+    transition: 'none',
   },
   underline: {
     position: 'absolute',

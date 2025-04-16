@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import searchIcon from '../assets/icons/search.png';
 import logo from '../assets/LogoNameAlpha.png';
 
 import iphoneImg from '../assets/items/iphone16.jpg';
@@ -11,10 +10,12 @@ import paintingImg from '../assets/items/paintingstarrynight.jpg';
 import powerbankImg from '../assets/items/powebankanker.jpg';
 import bikeImg from '../assets/items/bike.jpg';
 
-function BrowsePage({ type }) {
+function BrowsePage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [seller, setSeller] = useState('All');
   const [filter, setFilter] = useState('All');
+  const [club, setClub] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [theme, setTheme] = useState({ green: '#00813e' });
   const stickyRef = useRef();
@@ -22,14 +23,19 @@ function BrowsePage({ type }) {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const cat = params.get('category');
+    const sellerParam = params.get('seller');
+    const clubParam = params.get('club');
     const search = params.get('search');
-    if (cat) setFilter(cat);
-    if (search) setSearchQuery(search);
+
+    if (cat) setFilter(cat); else setFilter('All');
+    if (sellerParam) setSeller(sellerParam); else setSeller('All');
+    if (clubParam) setClub(clubParam); else setClub('All');
+    if (search) setSearchQuery(search); else setSearchQuery('');
   }, [location.search]);
 
   const items = [
     {
-      id: 's202100001',
+      id: 'itm000001',
       name: 'iPhone 16',
       price: '3000 SAR',
       categories: ['Electronics'],
@@ -37,7 +43,7 @@ function BrowsePage({ type }) {
       image: iphoneImg,
     },
     {
-      id: 's202100002',
+      id: 'itm000002',
       name: 'Rich Dad Poor Dad',
       price: '20 SAR',
       categories: ['Books'],
@@ -45,7 +51,7 @@ function BrowsePage({ type }) {
       image: bookImg,
     },
     {
-      id: 's202100003',
+      id: 'itm000003',
       name: 'Modern Sofa',
       price: '500 SAR',
       bid: '100 SAR',
@@ -55,7 +61,7 @@ function BrowsePage({ type }) {
       image: couchImg,
     },
     {
-      id: 's202028860',
+      id: 'itm000004',
       name: 'Gaming Chair',
       bid: '300 SAR',
       timeLeft: '5 Days',
@@ -64,15 +70,17 @@ function BrowsePage({ type }) {
       image: chairImg,
     },
     {
+      id: 'club001',
       name: 'Starry Night Poster',
       price: '45 SAR',
       quantity: '3 left',
-      categories: ['Media'],
+      categories: ['Art'],
       fromClub: true,
+      club: 'Media',
       image: paintingImg,
     },
     {
-      id: 's202100005',
+      id: 'itm000005',
       name: 'Anker Power Bank',
       price: '150 SAR',
       categories: ['Electronics'],
@@ -80,8 +88,8 @@ function BrowsePage({ type }) {
       image: powerbankImg,
     },
     {
-      id: 's202100006',
-      name: 'Sport Bike',
+      id: 'itm000006',
+      name: 'Sport Bike Auction',
       bid: '900 SAR',
       timeLeft: '5 Days',
       categories: ['Sports'],
@@ -89,22 +97,29 @@ function BrowsePage({ type }) {
       image: bikeImg,
     },
     {
+      id: 'club002',
       name: 'Sport Bike',
       price: '1000 SAR',
       quantity: 'On Request',
-      categories: ['Cyclists'],
+      categories: ['Cyclists', 'Sports'],
       fromClub: true,
+      club: 'Cyclists',
       image: bikeImg,
     },
   ];
 
   const filteredItems = items.filter((item) => {
-    const matchesType = type === 'clubs' ? item.fromClub : !item.fromClub;
+    const matchesSeller =
+      seller === 'All' ||
+      (seller === 'Clubs' && item.fromClub) ||
+      (seller === 'Resell' && !item.fromClub);
     const matchesCategory = filter === 'All' || item.categories.includes(filter);
+    const matchesClub = !item.fromClub || seller !== 'Clubs' || club === 'All' || item.club === club;
     const matchesSearch =
+      searchQuery === '' ||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (item.id && item.id.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesType && matchesCategory && matchesSearch;
+    return matchesSeller && matchesCategory && matchesClub && matchesSearch;
   });
 
   useEffect(() => {
@@ -114,38 +129,62 @@ function BrowsePage({ type }) {
     });
   }, []);
 
-  const handleSearchEnter = (e) => {
-    if (e.key === 'Enter') {
-      navigate(`/browse/${type}?search=${searchQuery}`);
-    }
+  const updateQuery = (nextSeller = seller, nextFilter = filter, nextClub = club) => {
+    const query = new URLSearchParams();
+    if (nextSeller !== 'All') query.set('seller', nextSeller);
+    if (nextFilter !== 'All') query.set('category', nextFilter);
+    if (nextSeller === 'Clubs' && nextClub !== 'All') query.set('club', nextClub);
+    if (searchQuery) query.set('search', searchQuery);
+    return query.toString();
+  };
+
+  const handleSellerClick = (val) => {
+    setSeller(val);
+    const nextClub = val === 'Clubs' ? club : 'All';
+    navigate(`/browse?${updateQuery(val, filter, nextClub)}`);
   };
 
   const handleCategoryClick = (cat) => {
-    navigate(`/browse/${type}?category=${cat}`);
+    setFilter(cat);
+    navigate(`/browse?${updateQuery(seller, cat, club)}`);
   };
 
-  const clubCategories = ['All', 'Media', 'Consulting', 'Cyclists', 'AE', 'IE'];
-  const studentCategories = ['All', 'Electronics', 'Furniture', 'Books', 'Art', 'Sports'];
+  const handleClubChange = (clubName) => {
+    setClub(clubName);
+    navigate(`/browse?${updateQuery(seller, filter, clubName)}`);
+  };
+
+  const clubList = ['All', 'Media', 'Consulting', 'Cyclists', 'AE', 'IE'];
+  const categories = ['All', 'Electronics', 'Furniture', 'Books', 'Art', 'Sports'];
+  const sellers = ['All', 'Clubs', 'Resell'];
 
   return (
     <div style={styles.wrapper}>
       <img src={logo} alt="KFUPM Market" style={styles.logo} />
 
-      <div ref={stickyRef} style={styles.stickyHeader}>
-        <div style={styles.searchContainer}>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={handleSearchEnter}
-            placeholder="Search for specific items with name/ID"
-            style={styles.search}
-          />
-          <img src={searchIcon} alt="Search" style={styles.searchIcon} />
+      
+
+
+
+      <div style={styles.headerContent}>
+        <div style={styles.filterRow}>
+          {sellers.map((val) => (
+            <button
+              key={val}
+              onClick={() => handleSellerClick(val)}
+              style={{
+                ...styles.filterBtn,
+                backgroundColor: seller === val ? theme.green : '#fff',
+                color: seller === val ? '#fff' : '#000',
+              }}
+            >
+              {val === 'Resell' ? 'Student Resell' : val}
+            </button>
+          ))}
         </div>
 
         <div style={styles.filterRow}>
-          {(type === 'clubs' ? clubCategories : studentCategories).map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => handleCategoryClick(cat)}
@@ -159,18 +198,39 @@ function BrowsePage({ type }) {
             </button>
           ))}
         </div>
+
+        {seller === 'Clubs' && (
+          <div style={styles.filterRow}>
+            {clubList.map((clubName) => (
+              <button
+                key={clubName}
+                onClick={() => handleClubChange(clubName)}
+                style={{
+                  ...styles.filterBtn,
+                  backgroundColor: club === clubName ? theme.green : '#fff',
+                  color: club === clubName ? '#fff' : '#000',
+                }}
+              >
+                {clubName}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div style={styles.itemGrid}>
-        {filteredItems.map((item, i) => (
-          <div key={i} style={styles.card}>
+        {filteredItems.map((item) => (
+          <div key={item.id} style={styles.card}>
             <img src={item.image} alt={item.name} style={styles.itemImage} />
             <div style={styles.itemName}>{item.name}</div>
             <div style={styles.itemPrice}>
               {item.price ? `Buy: ${item.price}` : <span style={{ opacity: 0.5 }}>Buy: —</span>}
             </div>
             {item.fromClub ? (
-              <div style={styles.quantityInfo}>{item.quantity || 'On Request'}</div>
+              <>
+                <div style={styles.quantityInfo}>{item.quantity || 'On Request'}</div>
+                <div style={styles.bidInfo}>Club: {item.club}</div>
+              </>
             ) : (
               <div style={styles.bidInfo}>
                 {item.bid ? `Bid: ${item.bid} | ${item.timeLeft}` : <span style={{ opacity: 0.5 }}>Bid: —</span>}
@@ -183,6 +243,8 @@ function BrowsePage({ type }) {
   );
 }
 
+
+
 const styles = {
   wrapper: {
     backgroundColor: '#fff',
@@ -191,37 +253,11 @@ const styles = {
   },
   logo: {
     width: 240,
-    margin: '0 auto 1rem',
+    margin: '1rem auto',
     display: 'block',
   },
-  stickyHeader: {
-    position: 'sticky',
-    top: 0,
-    backgroundColor: '#fff',
-    zIndex: 10,
-    padding: '0.5rem 1rem 1rem',
-    boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-  },
-  searchContainer: {
-    position: 'relative',
-    marginBottom: '0.5rem',
-  },
-  search: {
-    width: '100%',
-    padding: '0.75rem 2.5rem 0.75rem 1rem',
-    borderRadius: 30,
-    border: '1px solid #ccc',
-    fontSize: '0.9rem',
-  },
-  searchIcon: {
-    position: 'absolute',
-    right: 15,
-    top: '50%',
-    transform: 'translateY(-50%)',
-    width: 20,
-    height: 20,
-    objectFit: 'contain',
-    opacity: 0.6,
+  headerContent: {
+    padding: '0 1rem 1rem',
   },
   filterRow: {
     display: 'flex',
