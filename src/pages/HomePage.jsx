@@ -7,27 +7,47 @@ import cyclists from '../assets/clubs/cyclists.jpeg';
 import ie from '../assets/clubs/ie.jpeg';
 import media from '../assets/clubs/media.jpeg';
 
-import furnitureIcon from '../assets/icons/chair.png';
-import electronicsIcon from '../assets/icons/electronics.png';
-import booksIcon from '../assets/icons/book.png';
-import toolsIcon from '../assets/icons/tools.png';
-import allIcon from '../assets/icons/new.png';
-import dropdownIcon from '../assets/icons/dropdown.svg';
+import { ReactComponent as FurnitureIcon } from '../assets/icons/couch.svg';
+import { ReactComponent as ElectronicsIcon } from '../assets/icons/electronics.svg';
+import { ReactComponent as BooksIcon } from '../assets/icons/bookf.svg';
+import { ReactComponent as ToolsIcon } from '../assets/icons/tools.svg';
+import { ReactComponent as AllIcon } from '../assets/icons/packagef.svg';
+
+import { ReactComponent as DropdownIcon } from '../assets/icons/dropdown.svg';
+import { ReactComponent as GroupIcon } from '../assets/icons/group.svg';
+import { ReactComponent as PersonSearchIcon } from '../assets/icons/personsearch.svg';
 
 import logo from '../assets/LogoNameAlpha.png';
 
 function HomePage() {
   const navigate = useNavigate();
-  const [theme, setTheme] = useState({ green: '#00813e' });
   const [clubOpen, setClubOpen] = useState(true);
   const [resellOpen, setResellOpen] = useState(true);
 
   useEffect(() => {
-    const root = getComputedStyle(document.documentElement);
-    setTheme({
-      green: root.getPropertyValue('--primary-green') || '#00813e',
-    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  const HeaderCapsule = ({ title, desc, open, setOpen, icon: Icon }) => (
+    <div
+      style={{ ...styles.headerCapsule, backgroundColor: 'var(--primary-green)' }}
+      onClick={() => setOpen(!open)}
+    >
+      <div style={styles.leftSection}>
+        <DropdownIcon
+          style={{
+            ...styles.dropdownIcon,
+            transform: open ? 'rotate(0deg)' : 'rotate(-90deg)',
+          }}
+        />
+        <div>
+          <div style={styles.headerText}>{title}</div>
+          <div style={styles.subText}>{desc}</div>
+        </div>
+      </div>
+      <Icon style={styles.sectionIcon} />
+    </div>
+  );
 
   const handleClick = (seller, category, club = null) => {
     const query = new URLSearchParams();
@@ -40,17 +60,16 @@ function HomePage() {
   return (
     <div style={styles.wrapper}>
       <div style={styles.pageContent}>
-        <img src={logo} alt="KFUPM Market Logo" style={styles.logo} />
+        <img src={logo} alt="Market Logo" style={styles.logo} />
 
-        {/* Club Section */}
         <div style={styles.section}>
-          <div style={{ ...styles.headerCapsule, backgroundColor: theme.green }} onClick={() => setClubOpen(!clubOpen)}>
-            <img src={dropdownIcon} alt="toggle" style={{ ...styles.dropdownIcon, transform: clubOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-            <div>
-              <div style={styles.headerText}>KFUPM Club services</div>
-              <div style={styles.subText}>Support your favorite clubs</div>
-            </div>
-          </div>
+          <HeaderCapsule
+            title="Clubs Services"
+            desc="Support your favorite clubs"
+            open={clubOpen}
+            setOpen={setClubOpen}
+            icon={GroupIcon}
+          />
           <div
             style={{
               ...styles.animatedGrid,
@@ -59,28 +78,31 @@ function HomePage() {
               marginTop: clubOpen ? 10 : 0,
             }}
           >
-            {[{ img: allIcon, label: 'All' }, { img: media, label: 'Media' }, { img: consulting, label: 'Consulting' }, { img: cyclists, label: 'Cyclists' }, { img: ae, label: 'AE' }, { img: ie, label: 'IE' }].map((club, i) => (
+            {[{ Icon: AllIcon, label: 'All' }, { img: media, label: 'Media' }, { img: consulting, label: 'Consulting' }, { img: cyclists, label: 'Cyclists' }, { img: ae, label: 'AE' }, { img: ie, label: 'IE' }].map((club, i) => (
               <div
                 key={i}
                 style={{ ...styles.resellCard, cursor: 'pointer' }}
                 onClick={() => handleClick('Clubs', 'All', club.label)}
               >
-                <img src={club.img} alt={club.label} style={styles.icon} />
+                {club.Icon ? (
+                  <club.Icon style={styles.iconSvg} />
+                ) : (
+                  <img src={club.img} alt={club.label} style={styles.iconImg} />
+                )}
                 <span>{club.label}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Resell Section */}
         <div style={styles.section}>
-          <div style={{ ...styles.headerCapsule, backgroundColor: theme.green }} onClick={() => setResellOpen(!resellOpen)}>
-            <img src={dropdownIcon} alt="toggle" style={{ ...styles.dropdownIcon, transform: resellOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
-            <div>
-              <div style={styles.headerText}>KFUPM Student resell</div>
-              <div style={styles.subText}>Help students while saving money</div>
-            </div>
-          </div>
+          <HeaderCapsule
+            title="Student Resell"
+            desc="Help students while saving money"
+            open={resellOpen}
+            setOpen={setResellOpen}
+            icon={PersonSearchIcon}
+          />
           <div
             style={{
               ...styles.animatedGrid,
@@ -89,13 +111,13 @@ function HomePage() {
               marginTop: resellOpen ? 10 : 0,
             }}
           >
-            {[{ img: allIcon, label: 'All' }, { img: furnitureIcon, label: 'Furniture' }, { img: electronicsIcon, label: 'Electronics' }, { img: booksIcon, label: 'Books' }, { img: toolsIcon, label: 'Tools' }].map((item, i) => (
+            {[{ Icon: AllIcon, label: 'All' }, { Icon: FurnitureIcon, label: 'Furniture' }, { Icon: ElectronicsIcon, label: 'Electronics' }, { Icon: BooksIcon, label: 'Books' }, { Icon: ToolsIcon, label: 'Tools' }].map((item, i) => (
               <div
                 key={i}
                 style={{ ...styles.resellCard, cursor: 'pointer' }}
                 onClick={() => handleClick('Resell', item.label)}
               >
-                <img src={item.img} alt={item.label} style={styles.icon} />
+                <item.Icon style={styles.iconSvg} />
                 <span>{item.label}</span>
               </div>
             ))}
@@ -109,8 +131,9 @@ function HomePage() {
 const styles = {
   wrapper: {
     minHeight: '100vh',
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--white)',
     paddingBottom: '4.5rem',
+    color: 'var(--text-dark)',
   },
   pageContent: {
     padding: '1rem',
@@ -121,16 +144,22 @@ const styles = {
     display: 'block',
   },
   section: {
-    marginBottom: 30,
+    marginBottom: '2rem',
+  },
+  leftSection: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
   },
   headerCapsule: {
     display: 'flex',
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 30,
     padding: '0.75rem 1rem',
     color: 'white',
     cursor: 'pointer',
-    gap: 10,
+    transition: 'all 0.3s ease',
   },
   headerText: {
     fontSize: '1rem',
@@ -144,18 +173,23 @@ const styles = {
     width: 24,
     height: 24,
     filter: 'brightness(0) invert(1)',
-    transition: 'transform 0.3s ease',
+    transition: 'transform 0.4s ease',
+  },
+  sectionIcon: {
+    width: 28,
+    height: 28,
+    fill: 'white',
   },
   animatedGrid: {
     overflow: 'hidden',
-    transition: 'max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease',
+    transition: 'all 0.4s ease',
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
     gap: 12,
     justifyItems: 'center',
   },
   resellCard: {
-    border: '1px solid #ccc',
+    border: '1px solid var(--gray-border)',
     borderRadius: 12,
     width: 100,
     height: 100,
@@ -166,13 +200,21 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+    boxShadow: '0 2px 6px var(--card-shadow)',
+    backgroundColor: 'var(--white)',
+    color: 'var(--text-dark)',
   },
-  icon: {
+  iconImg: {
     width: 34,
     height: 34,
     objectFit: 'contain',
     marginBottom: 6,
+  },
+  iconSvg: {
+    width: 34,
+    height: 34,
+    marginBottom: 6,
+    fill: 'var(--text-dark)',
   },
 };
 

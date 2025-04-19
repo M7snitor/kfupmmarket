@@ -8,6 +8,7 @@ import ItemDetailPage from './pages/ItemDetailPage';
 import Layout from './components/Layout';
 import CartPage from './pages/CartPage';
 import MorePage from './pages/MorePage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/more" element={<MorePage />} />
         <Route path="*" element={<Navigate to="/browse" />} />
+        <Route path="/chat" element={<ChatPage />} />
       </Route>
     </Routes>
   );

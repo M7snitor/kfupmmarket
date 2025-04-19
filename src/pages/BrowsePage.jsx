@@ -1,14 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import logo from '../assets/LogoNameAlpha.png';
-
-import iphoneImg from '../assets/items/iphone16.jpg';
-import bookImg from '../assets/items/book.jpeg';
-import couchImg from '../assets/items/couch.jpg';
-import chairImg from '../assets/items/gamingchair.jpg';
-import paintingImg from '../assets/items/paintingstarrynight.jpg';
-import powerbankImg from '../assets/items/powebankanker.jpg';
-import bikeImg from '../assets/items/bike.jpg';
+import items from '../data/items';
 
 function BrowsePage() {
   const location = useLocation();
@@ -19,7 +12,6 @@ function BrowsePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('new');
   const [theme, setTheme] = useState({ green: '#00813e' });
-  const stickyRef = useRef();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -32,17 +24,6 @@ function BrowsePage() {
     if (clubParam) setClub(clubParam); else setClub('All');
     if (search) setSearchQuery(search); else setSearchQuery('');
   }, [location.search]);
-
-  const items = [
-    { id: 'itm000001', name: 'iPhone 16', price: '3000 SAR', categories: ['Electronics'], fromClub: false, date: '2024-04-01', image: iphoneImg },
-    { id: 'itm000002', name: 'Rich Dad Poor Dad', price: '20 SAR', categories: ['Books'], fromClub: false, date: '2024-03-28', image: bookImg },
-    { id: 'itm000003', name: 'Modern Sofa', price: '500 SAR', bid: '100 SAR', timeLeft: '2 Days', categories: ['Furniture'], fromClub: false, date: '2024-03-25', image: couchImg },
-    { id: 'itm000004', name: 'Gaming Chair', bid: '300 SAR', timeLeft: '5 Days', categories: ['Furniture'], fromClub: false, date: '2024-03-30', image: chairImg },
-    { id: 'club001', name: 'Starry Night Poster', price: '45 SAR', quantity: '3 left', categories: ['Art'], fromClub: true, club: 'Media', date: '2024-04-03', image: paintingImg },
-    { id: 'itm000005', name: 'Anker Power Bank', price: '150 SAR', categories: ['Electronics'], fromClub: false, date: '2024-03-29', image: powerbankImg },
-    { id: 'itm000006', name: 'Sport Bike Auction', bid: '900 SAR', timeLeft: '5 Days', categories: ['Sports'], fromClub: false, date: '2024-03-27', image: bikeImg },
-    { id: 'club002', name: 'Sport Bike', price: '1000 SAR', quantity: 'On Request', categories: ['Cyclists', 'Sports'], fromClub: true, club: 'Cyclists', date: '2024-03-26', image: bikeImg },
-  ];
 
   const filteredItems = items.filter((item) => {
     const matchesSeller = seller === 'All' || (seller === 'Clubs' && item.fromClub) || (seller === 'Resell' && !item.fromClub);
@@ -60,7 +41,7 @@ function BrowsePage() {
       const priceB = parseFloat((b.price || '').replace(/[^\d.]/g, '')) || 0;
       return priceB - priceA;
     }
-    return new Date(b.date) - new Date(a.date); // default: new
+    return new Date(b.date) - new Date(a.date);
   });
 
   useEffect(() => {
@@ -184,30 +165,31 @@ function BrowsePage() {
 
       <div style={styles.itemGrid}>
         {filteredItems.map((item) => (
-          <div key={item.id} style={styles.card}>
-            <img src={item.image} alt={item.name} style={styles.itemImage} />
-            <div style={styles.itemName}>{item.name}</div>
-            <div style={styles.itemPrice}>
-              {item.price ? `Buy: ${item.price}` : <span style={{ opacity: 0.5 }}>Buy: —</span>}
-            </div>
-            {item.fromClub ? (
-              <>
-                <div style={styles.quantityInfo}>{item.quantity || 'On Request'}</div>
-                <div style={styles.bidInfo}>Club: {item.club}</div>
-              </>
-            ) : (
-              <div style={styles.bidInfo}>
-                {item.bid ? `Bid: ${item.bid} | ${item.timeLeft}` : <span style={{ opacity: 0.5 }}>Bid: —</span>}
+          <Link to={`/item/${item.id}`} key={item.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div style={styles.card}>
+              <img src={(item.images && item.images[0]) || item.image} alt={item.name} style={styles.itemImage} />
+
+              <div style={styles.itemName}>{item.name}</div>
+              <div style={styles.itemPrice}>
+                {item.price ? `Buy: ${item.price}` : <span style={{ opacity: 0.5 }}>Buy: —</span>}
               </div>
-            )}
-          </div>
+              {item.fromClub ? (
+                <>
+                  <div style={styles.quantityInfo}>{item.quantity || 'On Request'}</div>
+                  <div style={styles.bidInfo}>Club: {item.club}</div>
+                </>
+              ) : (
+                <div style={styles.bidInfo}>
+                  {item.bid ? `Bid: ${item.bid} | ${item.timeLeft}` : <span style={{ opacity: 0.5 }}>Bid: —</span>}
+                </div>
+              )}
+            </div>
+          </Link>
         ))}
       </div>
     </div>
   );
 }
-
-
 
 const styles = {
   wrapper: {

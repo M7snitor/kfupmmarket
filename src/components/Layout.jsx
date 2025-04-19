@@ -12,8 +12,16 @@ import { ReactComponent as AccountIconActive } from '../assets/icons/personf.svg
 import { ReactComponent as MenuIcon } from '../assets/icons/menu.svg';
 import searchIcon from '../assets/icons/search.png';
 import closeIcon from '../assets/icons/close.svg';
-import arrowBackIcon from '../assets/icons/arrow back.png';
+import { ReactComponent as ArrowBackIcon } from '../assets/icons/arrowl.svg';
 import scrollUpIcon from '../assets/icons/scrollup.svg';
+
+const tabs = [
+  { path: '/home', label: 'Home', icon: HomeIcon, active: HomeIconActive },
+  { path: '/browse', label: 'Market', icon: ShopIcon, active: ShopIconActive },
+  { path: '/cart', label: 'Cart', icon: BrowseIcon, active: BrowseIconActive },
+  { path: '/account', label: 'You', icon: AccountIcon, active: AccountIconActive },
+  { path: '/more', label: 'More', icon: MenuIcon, active: MenuIcon },
+];
 
 function Layout() {
   const location = useLocation();
@@ -26,18 +34,8 @@ function Layout() {
   const searchInputRef = useRef(null);
   const navRefs = useRef([]);
 
-  const tabs = [
-    { path: '/home', label: 'Home', icon: HomeIcon, active: HomeIconActive },
-    { path: '/browse', label: 'Market', icon: ShopIcon, active: ShopIconActive },
-    { path: '/cart', label: 'Cart', icon: BrowseIcon, active: BrowseIconActive },
-    { path: '/account', label: 'You', icon: AccountIcon, active: AccountIconActive },
-    { path: '/more', label: 'More', icon: MenuIcon, active: MenuIcon },
-  ];
-
-  const isActive = (path) => location.pathname.startsWith(path);
-
   useEffect(() => {
-    const activeIndex = tabs.findIndex((tab) => isActive(tab.path));
+    const activeIndex = tabs.findIndex((tab) => location.pathname.startsWith(tab.path));
     const ref = navRefs.current[activeIndex];
     if (ref) {
       const left = ref.offsetLeft + ref.offsetWidth / 4;
@@ -103,11 +101,9 @@ function Layout() {
                 opacity: showBackArrow ? 1 : 0,
               }}
             >
-              <img
-                src={arrowBackIcon}
-                alt="back"
+              <ArrowBackIcon
                 onClick={handleSearchBack}
-                style={styles.backIcon}
+                style={styles.backSvgIcon}
               />
             </div>
             <div
@@ -161,7 +157,8 @@ function Layout() {
       {!isLogin && (
         <div style={styles.navbar}>
           {tabs.map((tab, index) => {
-            const IconComponent = isActive(tab.path) ? tab.active : tab.icon;
+            const isTabActive = location.pathname.startsWith(tab.path);
+            const IconComponent = isTabActive ? tab.active : tab.icon;
             return (
               <button
                 key={tab.path}
@@ -173,14 +170,14 @@ function Layout() {
                   <IconComponent
                     style={{
                       ...styles.icon,
-                      fill: isActive(tab.path) ? 'var(--primary-green)' : 'var(--text-light)',
+                      fill: isTabActive ? 'var(--primary-green)' : 'var(--text-light)',
                     }}
                   />
                   <div
                     style={{
                       ...styles.label,
-                      color: isActive(tab.path) ? 'var(--primary-green)' : 'var(--text-light)',
-                      fontWeight: isActive(tab.path) ? '600' : '400',
+                      color: isTabActive ? 'var(--primary-green)' : 'var(--text-light)',
+                      fontWeight: isTabActive ? '600' : '400',
                     }}
                   >
                     {tab.label}
@@ -218,10 +215,11 @@ const styles = {
     marginRight: 8,
     transition: 'all 0.3s ease',
   },
-  backIcon: {
+  backSvgIcon: {
     width: 20,
     height: 20,
     cursor: 'pointer',
+    fill: 'var(--text-dark)',
   },
   inputWrapper: {
     position: 'relative',
@@ -284,7 +282,7 @@ const styles = {
   icon: {
     width: 22,
     height: 22,
-    transition: 'all 0.3s ease',
+    transition: 'transform 0.3s ease',
   },
   label: {
     fontSize: '0.7rem',
