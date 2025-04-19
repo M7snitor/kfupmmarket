@@ -45,7 +45,7 @@ function CartPage() {
       return sum + num;
     }, 0);
 
-  const HeaderCapsule = ({ title, count, open, setOpen }) => (
+  const HeaderCapsule = ({ title, count, open, setOpen, icon: Icon }) => (
     <div style={styles.headerCapsule} onClick={() => setOpen(!open)}>
       <div style={styles.leftSection}>
         <DropdownIcon
@@ -59,6 +59,7 @@ function CartPage() {
           <div style={styles.subText}>{count} item(s)</div>
         </div>
       </div>
+      {Icon && <Icon style={styles.sectionIcon} />}
     </div>
   );
 
@@ -96,7 +97,7 @@ function CartPage() {
   return (
     <div style={styles.wrapper}>
       <div style={styles.section}>
-        <HeaderCapsule title="In Your Cart" count={cart.length} open={cartOpen} setOpen={setCartOpen} />
+        <HeaderCapsule title="Cart" count={cart.length} open={cartOpen} setOpen={setCartOpen} icon={CartIcon} />
         <div
           style={{
             ...styles.animatedBox,
@@ -120,7 +121,7 @@ function CartPage() {
       </div>
 
       <div style={styles.section}>
-        <HeaderCapsule title="Watchlist" count={watchlist.length} open={watchOpen} setOpen={setWatchOpen} />
+        <HeaderCapsule title="Watchlist" count={watchlist.length} open={watchOpen} setOpen={setWatchOpen} icon={EyeIcon} />
         <div
           style={{
             ...styles.animatedBox,
@@ -136,7 +137,7 @@ function CartPage() {
       </div>
 
       <div style={styles.section}>
-        <HeaderCapsule title="Bid List" count={bidlist.length} open={bidOpen} setOpen={setBidOpen} />
+        <HeaderCapsule title="Bid List" count={bidlist.length} open={bidOpen} setOpen={setBidOpen} icon={BidIcon} />
         <div
           style={{
             ...styles.animatedBox,
@@ -185,6 +186,11 @@ const styles = {
     height: 24,
     filter: 'brightness(0) invert(1)',
     transition: 'transform 0.3s ease',
+  },
+  sectionIcon: {
+    width: 24,
+    height: 24,
+    fill: 'white',
   },
   headerText: {
     fontSize: '1rem',
