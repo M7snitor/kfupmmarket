@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import items from '../data/items';
 
 import { ReactComponent as BidIcon } from '../assets/icons/bid.svg';
@@ -12,10 +13,11 @@ function CartPage() {
   const [cartOpen, setCartOpen] = useState(true);
   const [watchOpen, setWatchOpen] = useState(true);
   const [bidOpen, setBidOpen] = useState(true);
-
   const [cart, setCart] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
   const [bidlist, setBidlist] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const otherItems = items.filter((item) => item.accountId !== '000001');
@@ -63,7 +65,7 @@ function CartPage() {
   const ItemCard = ({ item, type }) => (
     <div style={styles.card}>
       <img src={item.images?.[0] || item.image} alt={item.name} style={styles.itemImage} />
-      <div style={styles.itemText}>
+      <div style={styles.itemText} onClick={() => navigate(`/item/${item.id}`)}>
         <div style={styles.name}>{item.name}</div>
         {item.price && <div style={styles.buy}>Buy: {item.price}</div>}
         {item.bid && <div style={styles.bid}>Bid: {item.bid} | {item.timeLeft}</div>}
@@ -107,14 +109,13 @@ function CartPage() {
             <ItemCard key={item.id} item={item} type="cart" />
           ))}
           {cart.length > 0 && (
-          <div style={styles.totalBox}>
-          <div style={styles.totalText}>Total: {getTotal()} SAR</div>
-          <button style={styles.buyBtn}>
-          <CheckIcon style={styles.btnIconWhite} /> Buy All
-           </button>
-           </div>
+            <div style={styles.totalBox}>
+              <div style={styles.totalText}>Total: {getTotal()} SAR</div>
+              <button style={styles.buyBtn}>
+                <CheckIcon style={styles.btnIconWhite} /> Buy All
+              </button>
+            </div>
           )}
-
         </div>
       </div>
 
@@ -179,11 +180,6 @@ const styles = {
     alignItems: 'center',
     gap: 10,
   },
-  totalText: {
-    fontSize: '1rem',
-    fontWeight: 'bold',
-    color: 'var(--text-dark)',
-  },
   dropdownIcon: {
     width: 24,
     height: 24,
@@ -221,6 +217,7 @@ const styles = {
   },
   itemText: {
     flex: 1,
+    cursor: 'pointer',
   },
   name: {
     fontWeight: 600,
@@ -268,6 +265,11 @@ const styles = {
     padding: '0.5rem 0.8rem',
     borderTop: '1px solid var(--gray-border)',
     marginTop: 8,
+  },
+  totalText: {
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    color: 'var(--text-dark)',
   },
   buyBtn: {
     backgroundColor: 'var(--primary-green)',
