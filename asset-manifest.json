@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/kfupmmarket/static/css/main.ba6b515e.css",
-    "main.js": "/kfupmmarket/static/js/main.245b4cdd.js",
+    "main.js": "/kfupmmarket/static/js/main.2629d9c8.js",
     "static/media/bike.jpg": "/kfupmmarket/static/media/bike.2c90119541271ce21522.jpg",
     "static/media/powebankanker.jpg": "/kfupmmarket/static/media/powebankanker.eb7db9ed56ba285adaa5.jpg",
     "static/media/iphone16-2.jpg": "/kfupmmarket/static/media/iphone16-2.5a02329a186796818f3f.jpg",
@@ -55,10 +55,10 @@
     "static/media/homef.svg": "/kfupmmarket/static/media/homef.9f99520362622d5d0db4fe6a662f4e12.svg",
     "static/media/dropdown.svg": "/kfupmmarket/static/media/dropdown.48d52214b49d9d044399d580453ecad1.svg",
     "main.ba6b515e.css.map": "/kfupmmarket/static/css/main.ba6b515e.css.map",
-    "main.245b4cdd.js.map": "/kfupmmarket/static/js/main.245b4cdd.js.map"
+    "main.2629d9c8.js.map": "/kfupmmarket/static/js/main.2629d9c8.js.map"
   },
   "entrypoints": [
     "static/css/main.ba6b515e.css",
-    "static/js/main.245b4cdd.js"
+    "static/js/main.2629d9c8.js"
   ]
 }
