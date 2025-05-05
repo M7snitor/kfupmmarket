@@ -1,0 +1,70 @@
+/* index.css */
+
+:root {
+    /* Main theme colors */
+    --primary-green: #00813e;
+    --light-green: #b6e5ce;
+    --dark-green: #006232;
+    --white: #ffffff;
+    --black: #1e1e1e; 
+    --text-dark: #222;
+    --text-light: #666;
+    --gray-border: #ccc;
+    --danger-red: #d60000;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+    
+  }
+  /* Dark Mode Variables */
+:root[data-theme='dark'] {
+  --primary-green: #00813e;
+  --light-green: #a8d9c1;
+  --dark-green: #003f20;
+  --white: #1e1e1e;
+  --black: #ffffff; 
+  --text-dark: #eee;
+  --text-light: #aaa;
+  --gray-border: #444;
+  --danger-red: #ff4f4f;
+  --card-shadow: rgba(255, 255, 255, 0.08);
+}
+
+body, html {
+  background-color: var(--white);
+  color: var(--text-dark);
+}
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--primary-green);
+    color: var(--text-dark);
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--white);
+  
+    
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+  
+  input, button {
+    outline: none;
+  }
+
+  
+  
