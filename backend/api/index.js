@@ -42,17 +42,17 @@ require('dotenv').config();
 
 const app = express();
 
-// ✅ FULLY OPEN CORS for demo
+
 app.use(cors());
 app.options('*', cors());
 
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/users', require('./routes/user'));
-app.use('/api/items', require('./routes/items'));
-app.use('/api/messages', require('./routes/message'));
+app.use('/api/auth', require('../routes/auth'));
+app.use('/api/users', require('../routes/user'));
+app.use('/api/items', require('../routes/items'));
+app.use('/api/messages', require('../routes/message'));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
