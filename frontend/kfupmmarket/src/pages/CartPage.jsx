@@ -28,20 +28,20 @@ export default function CartPage() {
   const [bidlist,    setBidlist]    = useState([])
 
   useEffect(() => {
-    axios.get(`${API}/api/users/cart`, headers).then(r => setCart(r.data.cart))
-    axios.get(`${API}/api/users/watchlist`, headers).then(r => setWatchlist(r.data.watchlist))
-    axios.get(`${API}/api/users/bidlist`, headers).then(r => setBidlist(r.data.bidlist))
+    axios.get(`${API}/users/cart`, headers).then(r => setCart(r.data.cart))
+    axios.get(`${API}/users/watchlist`, headers).then(r => setWatchlist(r.data.watchlist))
+    axios.get(`${API}/users/bidlist`, headers).then(r => setBidlist(r.data.bidlist))
   }, [])
 
   const removeFrom = async (list, id) => {
-    await axios.delete(`${API}/api/users/${list}/remove/${id}`, headers)
+    await axios.delete(`${API}/users/${list}/remove/${id}`, headers)
     if (list === 'cart')      setCart(c => c.filter(i => i._id !== id))
     if (list === 'watchlist') setWatchlist(w => w.filter(i => i._id !== id))
     if (list === 'bidlist')   setBidlist(b => b.filter(i => i._id !== id))
   }
 
   const moveTo = async (from, to, item) => {
-    await axios.post(`${API}/api/users/${from}/move-to-${to}/${item._id}`, {}, headers)
+    await axios.post(`${API}/users/${from}/move-to-${to}/${item._id}`, {}, headers)
     removeFrom(from, item._id)
     if (to === 'cart')      setCart(c => [...c, item])
     if (to === 'watchlist') setWatchlist(w => [...w, item])
@@ -54,12 +54,12 @@ export default function CartPage() {
 
   const buyAll = async () => {
     await Promise.all(cart.map(i =>
-      axios.put(`${API}/api/items/${i._id}/decrement`, {}, headers)
+      axios.put(`${API}/items/${i._id}/decrement`, {}, headers)
     ))
     await Promise.all(cart.map(i =>
-      axios.delete(`${API}/api/users/cart/remove/${i._id}`, headers)
+      axios.delete(`${API}/users/cart/remove/${i._id}`, headers)
     ))
-    const res = await axios.get(`${API}/api/users/cart`, headers)
+    const res = await axios.get(`${API}/users/cart`, headers)
     setCart(res.data.cart)
     alert(`Purchased for ${total} SAR`)
   }

@@ -30,8 +30,8 @@ function LoginPage() {
   const handleSubmit = async () => {
     try {
       const url = isLogin
-        ? `${process.env.REACT_APP_API_URL}/api/auth/login`
-        : `${process.env.REACT_APP_API_URL}/api/auth/register`;
+        ? `${process.env.REACT_APP_API_URL}/auth/login`
+        : `${process.env.REACT_APP_API_URL}/auth/register`;
       const response = await axios.post(url, formData);
       const { user, token } = response.data;
       login(user, token);

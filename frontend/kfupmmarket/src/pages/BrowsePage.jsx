@@ -15,7 +15,7 @@ function BrowsePage() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/api/items/all`)
+    axios.get(`${process.env.REACT_APP_API_URL}/items/all`)
       .then(res => setItems(res.data.items || []))
       .catch(err => console.error('Error fetching items:', err));
   }, []);

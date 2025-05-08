@@ -135,9 +135,9 @@ export default function ListingFormPage() {
       }
       const API = process.env.REACT_APP_API_URL
       if (editItem) {
-        await axios.put(`${API}/api/items/${editItem._id}`, fd, cfg)
+        await axios.put(`${API}/items/${editItem._id}`, fd, cfg)
       } else {
-        await axios.post(`${API}/api/items/post-item`, fd, cfg)
+        await axios.post(`${API}/items/post-item`, fd, cfg)
       }
       navigate('/account')
     } catch {

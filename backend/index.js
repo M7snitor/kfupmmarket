@@ -6,7 +6,10 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-  origin: 'https://kfupmmarket-frhv-hl251n84g-m7snitors-projects.vercel.app',
+  origin: [
+    'https://kfupmmarket-frhv.vercel.app',
+    'https://kfupmmarket-frhv-hl251n84g-m7snitors-projects.vercel.app'
+  ],
   credentials: true
 }));
 

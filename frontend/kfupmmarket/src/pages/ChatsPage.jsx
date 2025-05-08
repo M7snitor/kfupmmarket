@@ -14,7 +14,7 @@ export default function ChatsPage() {
 
   useEffect(() => {
     axios
-      .get(`${API}/api/messages/conversations`, headers)
+      .get(`${API}/messages/conversations`, headers)
       .then(res => {
         // each item has: { user: { accountId, name }, lastMessage, timestamp }
         setPeers(res.data.conversations || [])
