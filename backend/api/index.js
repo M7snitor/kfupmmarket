@@ -6,13 +6,19 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors({
+// CORS config
+const corsOptions = {
   origin: [
     'https://kfupmmarket-frhv.vercel.app',
-    'https://kfupmmarket-frhv-hl251n84g-m7snitors-projects.vercel.app'
+    'https://kfupmmarket-frhv-m7snitors-projects.vercel.app',
+    'https://kfupmmarket-frhv-git-master-m7snitors-projects.vercel.app',
+    'https://kfupmmarket-frhv-k12n7kkwi-m7snitors-projects.vercel.app'
   ],
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
